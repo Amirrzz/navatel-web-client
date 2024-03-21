@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Navatel App</title>
+    <base href="/" />
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <link rel="manifest" href="manifest.json" />
+    <!-- add to homescreen for ios -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Navatel App" />
+    <meta name="theme-color" content="#428cff" />
+    <link rel="mask-icon" type="image/png" href="Images/PWA-logos/mask.png" />
+
+    <link
+      rel="apple-touch-icon"
+      href="Images/PWA-Logos/ios/48.png"
+      sizes="48x48"
+      type="image/png"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="Images/PWA-Logos/ios/72.png"
+      sizes="72x72"
+      type="image/png"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="Images/PWA-Logos/io/96.png"
+      sizes="96x96"
+      type="image/png"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="Images/PWA-Logos/ios/144.png"
+      sizes="144x144"
+      type="image/png"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="Images/PWA-Logos/ios/168.png"
+      sizes="168x168"
+      type="image/png"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="Images/PWA-Logos/ios/192.png"
+      sizes="192x192"
+      type="image/png"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="Images/PWA-Logos/ios/256.png"
+      sizes="256x256"
+      type="image/png"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="Images/PWA-Logos/ios/512.png"
+      sizes="512x512"
+      type="image/png"
+    />
+    <style>
+      .footer-pwa-for-safari-in-web-app {
+        height: 150vh;
+        width: 100vw;
+        background-color: var(--ion-color-light);
+        position: relative;
+        z-index: -1;
+      }
+    </style>
+    <script src="/js/lame.all.js" defer></script>
+    <script src="/js/lame.min.js" defer></script>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <div class="footer-pwa-for-safari-in-web-app"></div>
+    <!-- for cover safari space bug in add to mobile design -->
+    <script type="module" src="./src/main.ts"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+  </body>
+</html>

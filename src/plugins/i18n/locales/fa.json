@@ -1,0 +1,343 @@
+{
+  "welcome": ".{person} خوش آمدین",
+  "welcomeBack": ".{person} خوش آمدین",
+  "message": "پیام | پیام‌ها | {count} پیام",
+  "changeLanguage": "Change Language",
+  "desktop": {
+    "welcome": "به نواتل خوش آمدید",
+    "logout": "خروج",
+    "addnewcontact": "اضافه کردن مخاطب جدید",
+    "addContact": "اضافه کردن مخاطب",
+    "editContact": "ویرایش مخاطب",
+    "fristNamError": "نام را وارد کنید",
+    "lastNameError": "نام خانوادگی را وارد کنید",
+    "countryCodeError": "کد اجباری است",
+    "phoneNumberError": "شماره تلفن را وارد کنید",
+    "seeprofile": "نمایش صفحه پروفایل",
+    "editnumber": "ویرایش شماره",
+    "deletenumber": "حذف شماره",
+    "removeContact": "حذف مخاطب",
+    "removeContactQuestion": " آیا برای پاک کردن مخاطب مطمئن هستید؟",
+    "account": "حساب کاربری",
+    "cancel": "لغو",
+    "phonenumber": "شماره تماس",
+    "username": "نام کاربری",
+    "sendmessage": "ارسال پیام",
+    "freeCall": "تماس رایگان",
+    "videocall": "تماس تصویری",
+    "callpad": "شماره گیر",
+    "transfer": "انتقال تماس به",
+    "contacts": "مخاطبین",
+    "createGroupNameError": "نام نمی‌تواند خالی باشد",
+    "tabs": {
+      "message": "پیام",
+      "contacts": "دفترچه تلفن",
+      "callpad": "شماره گیر",
+      "callHistory": "تاریخچه"
+    },
+    "profile": {
+      "account": "حساب کاربری",
+      "username": "نام کاربری",
+      "bio": "وضعیت",
+      "setting": "تنظیمات",
+      "wallet": "کیف پول",
+      "savemessage": "پیام‌های ذخیره شده",
+      "stickers": "استیکرها",
+      "support": "پشتیبانی"
+    }
+  },
+  "auth": {
+    "startPage": {
+      "title": "نواتل، نسل نوین ارتباط",
+      "subtitle1": "مرکز تلفن سازمانی نواتل",
+      "subtitle2": "برای انواع کسب و کارها",
+      "button": "شروع"
+    },
+    "phonePage": {
+      "title": "ورود به نواتل",
+      "subtitle": " لطفا کشورتان را انتخاب کنید و شماره خود را وارد نمایید. ",
+      "country": "نام کشور",
+      "phoneNumber": "شماره تلفن",
+      "button": "تایید و ادامه",
+      "validationErrors": {
+        "required": "ﺷﻤﺎﺭﻩ ﺗﻠﻔﻦ ﻧﻤﯿﺘﻮﺍﻧﺪ ﺧﺎﻟﯽ ﺑﺎﺷﺪ",
+        "min": "شماره تلفن حداقل باید {length} شماره باشد"
+      }
+    },
+    "confirmPage": {
+      "title": "ورود به نواتل",
+      "confirmCode": "ﮐﺪ ﺭﺍ ﻭﺍﺭﺩ ﻧﻤﺎﯾﯿﺪ",
+      "resendHint": " برای دریافت کد رجیستری مجدد درخواست دهید. ",
+      "resendMessage": "کد مجدد برای {phoneNumber} ارسال شد.",
+      "dismiss": "باشه",
+      "button": "تایید و ادامه",
+      "invalidCode": "کد تایید اشتباه است.",
+      "validationErrors": {
+        "required": "کد تایید الزلمیست",
+        "min": "کد تایید باید 6 رقمی باشد"
+      }
+    },
+    "informationPage": {
+      "title": "اطلاعات کاربر",
+      "avatar": "انتخاب تصویر آواتار",
+      "username": "نام کاربری خود را وارد نمایید.",
+      "button": "تایید",
+      "validationErrors": {
+        "required": "ﻧﺎﻡ ﮐﺎﺭﺑﺮﯼ ﻧﻤﯿﺘﻮﺍﻧﺪ ﺧﺎﻟﯽ ﺑﺎﺷﺪ"
+      }
+    }
+  },
+  "tabs": {
+    "callpad": {
+      "title": "تاریخچه تماس",
+      "addNumber": "افزودن شماره",
+      "mute": "قطع صدا",
+      "speaker": "بلندگو",
+      "keypad": "شماره‌گیر",
+      "transition": "انتقال",
+      "unknown": "ناشناس",
+      "showButtons": "نمایش دکمه‌ها",
+      "connecting": "در حال تماس",
+      "ringing": "در حال زنگ خوردن",
+      "inConversation": "در حال مکالمه",
+      "hold": "توقف",
+      "freeCall": "تماس رایگان",
+      "enterpriseDid": "تماس ورودی",
+      "navaOut": "تماس خروجی",
+      "missCall": "تماس از دست رفته ",
+      "videocall": "تماس تصویری",
+      "promt": {
+        "title": "انتقال تماس به",
+        "callPad": "امکان شماره گیری",
+        "contacts": "مخاطبین من"
+      }
+    },
+    "message": {
+      "title": "ﭘﯿﺎﻡ ﺭﺳﺎﻧﯽ",
+      "messenger": "پیام رسانی",
+      "sendmessage": "ارسال پیام",
+      "search": "جستجو",
+      "underDevelopment": "درحال توسعه",
+      "creategroup": "ایجاد گروه",
+      "createchannel": "ایجاد کانال",
+      "savemessage": "پیام‌های ذخیره شده",
+      "createnewgroup": "ایجاد گروه جدید",
+      "newgroup": "گروه جدید",
+      "selectmembergroup": "انتخاب اعضای گروه",
+      "enternamegroup": "نام گروه را وارد نمایید",
+      "member": "اعضا",
+      "person": "نفر",
+      "lastseen": "آخرین بازدید",
+      "edit": "ویرایش",
+      "recentMessages": "پیام های اخیر",
+      "newmessage": "ارسال پیام جدید",
+      "replay": "پاسخ به",
+      "forward": "ارسال به",
+      "copy": "کپی",
+      "remove": "حذف",
+
+      "delete": "حذف",
+      "replayedto": "پاسخ به",
+      "sendimage": "ارسال عکس",
+      "editedmessage": "ویرایش پیام",
+      "gallery": "گالری",
+      "file": "فایل",
+      "video": "ویدیو",
+      "music": "موزیک",
+      "location": "لوکیشن",
+      "savedMessages": "پیام‌های ذخیره شده",
+      "readMore": "ادامه مطلب...",
+      "group": {
+        "docmessage": "فایل",
+        "audiomessage": "پیام صوتی",
+        "stickermessage": "استکیر",
+        "videomessage": "پیام ویدیویی",
+        "photomessage": "پیام تصویری",
+        "startvideocall": "شروع تماس گروهی",
+        "videocall": " تصویری",
+        "mute": "بی صدا",
+        "unmute": "با صدا",
+        "more": "بیشتر",
+        "searchmember": "جستجو اعضا",
+        "leavegroup": "ترک و حذف گروه",
+        "notification": "اعلان ها",
+        "active": "فعال",
+        "addmember": "افزودن عضو",
+        "admin": "ادمین",
+        "owner": "صاحب گروه",
+        "deletefromgroup": "حذف از گروه",
+        "unassignadminrole": "برداشتن دسترسی ادمین",
+        "assignadminrole": "اعمال دسترسی ادمین",
+        "editname": "ویرایش نام",
+        "selectavatar": "انتخاب تصویر گروه",
+        "member": "عضو",
+        "commonMedia": "رسانه مشترک",
+        "me": "من",
+        "createdgroup": "گروه را ایجاد کرد",
+        "addedtogroup": "اضافه کرد",
+        "removed": "حذف کرد",
+        "leftthegroup": "گروه را ترک کرد",
+        "changeavatar": "ﺗﻐﯿﯿﺮ ﺩﺍﺩ ﺁﻭﺍﺗﺎﺭ ﮔﺮﻭﻩ",
+        "changename": "نام گروه را تغییر داد به",
+        "join": "به گروه ملحق شد ",
+        "validationErrors": {
+          "required": "نام گروه نمی‌تواند خالی باشد."
+        }
+      },
+      "chatInput": {
+        "sticker": "استیکر",
+        "emoji": "ایموجی",
+        "message": "پیام"
+      },
+      "chatCard": {
+        "isForwarded": "پیام هدایت شده از",
+        "edited": "اصلاح شده",
+        "fullScreen": {
+          "commonMedia": "رسانه های‌ مشترک",
+          "seeInChat": "نمایش در صفحه پیام",
+          "forward": "ارسال به",
+          "delete": "حذف"
+        }
+      }
+    },
+    "callHistory": {
+      "history": "تاریخچه",
+      "title": "تاریخچه تماس",
+      "hour": "{count} ساعت",
+      "minute": "{count} دقیقه",
+      "second": "{count} ثانیه",
+      "and": " و ",
+      "removeAlert": " آیا از حذف تماس (های) انتخاب شده مطمئن هستید؟",
+      "yes": "بله",
+      "no": "نه "
+    },
+    "contacts": {
+      "title": "دفترچه‌ تلفن",
+      "inviteContatcsTitle": "دعوت مخاطبان",
+      "inviteContactButton": "دعوت+",
+      "mediatabs": {
+        "media": "رسانه",
+        "file": "فایل",
+        "music": "موزیک",
+        "group": "گروه"
+      },
+      "addContacts": {
+        "title": "اضافه کردن مخاطب",
+        "firstName": "نام",
+        "firstNamePlaceholder": "نام ( ضروری )",
+        "lastName": "نام خانوادگی",
+        "contact": "مخاطب",
+        "validationErrors": {
+          "firstName": "نام الزامیست",
+          "lastName": "فامیلی الزامیست",
+          "userIsExist": "کاربر وجود دارد!"
+        },
+        "smsInvitationMessage": "پیشنهاد می کنم نواتل را برای گوشی خود نصب کنید؛ آن را از لینک زیر دانلود کنید  https://navatel.ir/downloads/"
+      },
+      "profile": {
+        "title": "اطلاعات حساب",
+        "lastseen": "آخرین بازدید",
+        "call": "تماس رایگان",
+        "videocall": "تماس گروهی",
+        "mute": "بی صدا",
+        "phonenumber": "شماره تماس",
+        "username": "نام کاربری",
+        "bio": "وضعیت",
+        "message": "پیام رایگان"
+      },
+      "lastSeen": "آخرین بازدید {time}",
+      "yesterday": "دیروز"
+    },
+    "profile": {
+      "title": "پروفایل",
+      "account": "حساب کاربری",
+      "bio": "وضعیت",
+      "selectPhoto": "انتخاب تصویر پروفایل",
+      "changeUserName": "تغییر نام کاربری",
+      "username": "نام کاربری",
+      "noName": "بی نام",
+      "online": "آنلاین",
+      "sticker": {
+        "headertitle": "استیکر",
+        "suggeststicker": "استیکر‌های پیشنهادی",
+        "view": "نمایش",
+        "notsticker": "شما استیکری ندارید",
+        "mysticker": "استیکر‌های من",
+        "delete": "حذف استیکر",
+        "sticker": "استیکر",
+        "add": "اضافه کردن",
+        "deletesticker": "حذف استیکر",
+        "loading": "لطفا منتظر باشید"
+      },
+      "setting": {
+        "title": "تنظیمات",
+        "language": "زبان",
+        "calendar": "تقویم",
+        "applicationlanguage": "زبان برنامه",
+        "english": "English",
+        "persian": "فارسی",
+        "ok": "باشه",
+        "toshamsi": "تغییر نمایش تاریخ میلادی به شمسی",
+        "tomiladi": "تغییر نمایش تاریخ شمسی به میلادی",
+        "theme": "تم",
+        "version": "ورژن"
+      },
+      "wallet": {
+        "title": "کیف پول",
+        "validity": "اعتبار",
+        "addvalidity": "افزایش اعتبار",
+        "giftcode": "کد هدیه",
+        "toman": "تومان",
+        "depoist": "شارژ کیف پول",
+        "onlinedeposit": "شارژ آنلاین"
+      },
+      "savedMessage": {
+        "title": "پیام‌های ذخیره شده"
+      },
+      "stickers": {
+        "title": "استیکر‌ها"
+      },
+      "support": {
+        "title": "پشتیبانی"
+      },
+      "logout": {
+        "title": "خروج"
+      },
+      "options": {
+        "editName": "ویرایش نام",
+        "takePhoto": "گرفتن تصویر",
+        "deletePhoto": "حذف تصویر"
+      },
+      "bioModal": {
+        "title": "وضعیت",
+        "inputHint": "در این قسمت شما میتوانید  تا حداکثر {count} کاراکتر در مورد خودتان یادداشت کنید."
+      },
+      "usernameModal": {
+        "title": "ویرایش نام",
+        "inputPlaceholder": "نام خود را وارد کنید",
+        "NameRequired": "نام نمی‌تواند خالی باشد."
+      }
+    }
+  },
+  "permissionsModal": {
+    "notification": {
+      "text": " آیا به نواتل اجازه دسترسی به نوتیفیکیشن برای تماس‌ها و پیام را می‌دهید؟ ",
+      "yes": "بله",
+      "no": "نه "
+    },
+    "microphone": {
+      "text": "آیا به نواتل اجازه دسترسی به میکروفون برای برقراری تماس‌ را می‌دهید؟",
+      "yes": "بله",
+      "no": "نه "
+    }
+  },
+  "errorMessages": {
+    "serverSide": {
+      "title": "خطای سرور",
+      "text": "خطایی در ارتباط با سرور اتفاق افتاده است.",
+      "hint": "لطفا مجدد تلاش کنید.",
+      "close": "بستن",
+      "tryAgain": "تلاش مجدد"
+    }
+  }
+}

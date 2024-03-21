@@ -1,0 +1,51 @@
+.calling-container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #4d545f;
+  position: relative;
+}
+.numbers-keypad-container {
+  height: 100%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  flex-direction: column;
+}
+.callpad-input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+  width: 100%;
+}
+
+/* Animations Class */
+
+.fade-in-animation {
+  opacity: 0;
+  animation-duration: 1s;
+  animation-name: show-fade-animation;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-fill-mode: both;
+  animation-direction: normal;
+}
+
+@keyframes show-fade-animation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+
+ion-popover {
+  --width: 200px;
+}
+
+ion-popover::part(backdrop) {
+ background: none;
+}

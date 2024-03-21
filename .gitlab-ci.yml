@@ -1,0 +1,82 @@
+image: repo.sgas.ir/node:16.18.0
+
+cache:
+  key: '$CI_COMMIT_REF_NAME'
+stages:
+    - build
+    - release_stg
+    - release_prod
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_HOST: tcp://10.0.0.87:2375
+  DOCKER_TLS_CERTDIR: ""
+  REGISTRY_URL_DEV: repo.sgas.ir/dev/backend/webclient
+  REGISTRY_URL_STG: repo.sgas.ir/stg/backend/webclient
+  REGISTRY_URL_PROD: repo.sgas.ir/prod/backend/webclient
+
+build:
+  stage: build
+  tags:
+    - BACKEND
+  script:
+    - yarn install
+#  artifacts:
+#    paths:
+#      - node_modules
+
+release_stg:
+  stage: release_stg
+  tags:
+    - BACKEND
+  image: repo.sgas.ir/dev/docker:dind
+  services:
+  - name: repo.sgas.ir/docker:dind
+    command: ["dockerd-entrypoint.sh", "--insecure-registry=repo.sgas.ir"]
+  before_script:
+    - echo -en "FROM repo.sgas.ir/node:16.18.0 \n" > build
+    - echo -en "COPY . . \n" >> build
+    - echo -en "RUN npm install -g http-server-spa \n" >>build
+    - echo -en "RUN npm install --global yurn \n" >>build
+    - echo -en "RUN yarn \n" >> build
+    - echo -en "RUN yarn build:stage \n" >>build
+ #   - echo -en "RUN sed -i 's/assets/webclient\/assets/g' dist/index.html \n" >>build
+    - echo -en "EXPOSE 8080 \n" >>build
+    - echo -en "ENTRYPOINT http-server-spa dist index.html 8080 \n" >>build
+  script:
+    - echo ${CI_COMMIT_TAG}
+    - VERSION=${CI_COMMIT_SHA:0:8}
+    - docker login  $DOCKER_REG_PUSH -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - docker login  $DOCKER_REG_PULL -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - docker build --network host -f build --no-cache=true --build-arg VERSION=${CI_COMMIT_SHA:0:8} -t "$REGISTRY_URL_STG:$VERSION" .
+    - docker push "$REGISTRY_URL_STG:$VERSION"
+    - echo "docker image pushed into registry"
+  only:
+    - master
+release_prod:
+  stage: release_prod
+  tags:
+    - BACKEND
+  image: repo.sgas.ir/dev/docker:dind
+  services:
+  - name: repo.sgas.ir/docker:dind
+    command: ["dockerd-entrypoint.sh", "--insecure-registry=repo.sgas.ir"]
+  before_script:
+    - echo -en "FROM repo.sgas.ir/node:16.18.0 \n" > build
+    - echo -en "COPY . . \n" >> build
+    - echo -en "RUN npm install -g http-server-spa \n" >>build
+    - echo -en "RUN npm install --global yurn \n" >>build
+    - echo -en "RUN yarn \n" >> build
+    - echo -en "RUN yarn build \n" >>build
+#    - echo -en "RUN sed -i 's/assets/webclient\/assets/g' dist/index.html \n" >>build
+    - echo -en "EXPOSE 8080 \n" >>build
+    - echo -en "ENTRYPOINT http-server-spa dist index.html 8080 \n" >>build
+  script:
+    - echo ${CI_COMMIT_TAG}
+    - VERSION=${CI_COMMIT_TAG}
+    - docker login  $DOCKER_REG_PUSH -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - docker login  $DOCKER_REG_PULL -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - docker build --network host -f build --no-cache=true --build-arg VERSION=${CI_COMMIT_TAG} -t "$REGISTRY_URL_PROD:$VERSION" .
+    - docker push "$REGISTRY_URL_PROD:$VERSION"
+    - echo "docker image pushed into registry"
+  only:
+    - tags

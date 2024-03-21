@@ -1,0 +1,341 @@
+{
+  "welcome": "Welcome {person}.",
+  "welcomeBack": "Welcome Back {person}.",
+  "message": "Message | Messages | {count} Messages",
+  "changeLanguage": "تغییر زبان",
+  "desktop": {
+    "welcome": "Welcome to navatel",
+    "logout": "Logout",
+    "addnewcontact": "Add new contact",
+    "addContact": "Add contact",
+    "editContact": "Edit contact",
+    "fristNamError": "Name is required",
+    "lastNameError": "Last name is required",
+    "countryCodeError": "Country code in required",
+    "phoneNumberError": "Phone number is required",
+    "seeprofile": "View profile",
+    "editnumber": "Edit number",
+    "deletenumber": "Edit number",
+    "removeContact": "Remove contact",
+    "removeContactQuestion": "Are you sure to delete the contact?",
+    "account": "Account",
+    "cancel": "Cancel",
+    "phonenumber": "Phone Number",
+    "username": "Username",
+    "sendmessage": "Send Message",
+    "freeCall": "Free Call",
+    "videocall": "Video Call",
+    "callpad": "Call Pad",
+    "transfer": "Transfer call to",
+    "contacts": "Contacts",
+    "createGroupNameError": "Please enter name",
+    "tabs": {
+      "message": "Message",
+      "contacts": "Contacts",
+      "callpad": "Callpad",
+      "callHistory": "Call History"
+    },
+    "profile": {
+      "account": "Account",
+      "username": "Username",
+      "bio": "Bio",
+      "setting": "Settings",
+      "wallet": "Wallet",
+      "savemessage": "Save Message",
+      "stickers": "Stickers",
+      "support": "Support"
+    }
+  },
+  "auth": {
+    "startPage": {
+      "title": "Navatel, New generation of communication",
+      "subtitle1": "Organizational Hosted-PBX ",
+      "subtitle2": "For All Business",
+      "button": "Start"
+    },
+    "phonePage": {
+      "title": "Entry to Navatel",
+      "subtitle": "Please chose your country and enter your number.",
+      "country": "Country Name",
+      "phoneNumber": "Phone Number",
+      "button": "Confirm and continue",
+      "validationErrors": {
+        "required": "The phone number cannot be empty",
+        "min": "Phone Number must have no less than {length} characters"
+      }
+    },
+    "confirmPage": {
+      "title": "Entry to Navatel",
+      "confirmCode": "Enter your code",
+      "resendHint": "Apply to receive the registration code again.",
+      "resendMessage": "Resend Code For {phoneNumber}",
+      "dismiss": "Dismiss",
+      "button": "Confirm and continue",
+      "invalidCode": "Code is invalid",
+      "validationErrors": {
+        "required": "Confirm Code is required",
+        "min": "Confirm Code must be 6 characters"
+      }
+    },
+    "informationPage": {
+      "title": "User Information",
+      "avatar": "Choose profile picture",
+      "username": "Enter your name",
+      "button": "Confirmation",
+      "validationErrors": {
+        "required": "Username cannot be empty"
+      }
+    }
+  },
+  "tabs": {
+    "callpad": {
+      "addNumber": "Add Number",
+      "mute": "Mute",
+      "speaker": "Speaker",
+      "keypad": "Dial pad",
+      "hold": "Hold",
+      "connecting": "Calling",
+      "ringing": "Ringing",
+      "inConversation": "In Conversation",
+      "unknown": "Unknown",
+      "transition": "Transfer",
+      "showButtons": "Show Buttons",
+      "freeCall": "Free Call",
+      "enterpriseDid": "Incoming Call",
+      "navaOut": "Navatel Out",
+      "missCall": "Miss Call",
+      "videocall": "Video Call",
+      "transform": {
+        "promt": {
+          "title": "Transfer the call to",
+          "callPad": "Ability to dial",
+          "contacts": "My Contacts"
+        }
+      }
+    },
+    "message": {
+      "title": "Message",
+      "messenger": "Messenger",
+      "sendmessage": "Send Message",
+      "search": "Search",
+      "creategroup": "Create Group",
+      "createchannel": "Create Channel",
+      "savemessage": "Save Message",
+      "createnewgroup": "Create New Group",
+      "newgroup": "New Group",
+      "selectmembergroup": "Who would you like to add?",
+      "enternamegroup": "Enter group name",
+      "member": "Members",
+      "person": "Person",
+      "lastseen": "Last seen",
+      "edit": "Edit",
+      "replay": "Replay",
+      "forward": "Forward",
+      "recentMessages": "Recent messages",
+      "delete": "Remove",
+      "replayedto": "Replay to",
+      "copy": "copy",
+      "remove": "Remove",
+      "sendimage": "Send Image",
+      "editedmessage": "Edited message",
+      "gallery": "Gallery",
+      "file": "File",
+      "video": "Video",
+      "music": "Music",
+      "location": "Location",
+      "savedMessages": "save Message",
+      "readMore": "Read more...",
+      "newmessage": "New Message",
+      "group": {
+        "docmessage": "File message",
+        "audiomessage": "Audio message",
+        "stickermessage": "Sticker",
+        "videomessage": "Video message",
+        "photomessage": "Image message",
+        "startvideocall": "Star video conference call",
+        "videocall": "video call",
+        "mute": "mute",
+        "unmute": "Un mute",
+        "more": "more",
+        "searchmember": "Search Members",
+        "leavegroup": "Delete and Leave Group",
+        "notification": "Notification",
+        "active": "Active",
+        "addmember": "Add Members",
+        "admin": "َAdmin",
+        "owner": "Owner",
+        "deletefromgroup": "Remove from Group",
+        "unassignadminrole": "Unassign Admin Role",
+        "assignadminrole": "Promote to admin",
+        "editname": "Edit Name",
+        "selectavatar": "Choose picture",
+        "member": "Member",
+        "commonMedia": "Share Media",
+        "me": "Me",
+        "createdgroup": "created the group",
+        "addedtogroup": "Added",
+        "removed": "removed",
+        "leftthegroup": "Left the group",
+        "changeavatar": "changed group picture",
+        "changename": "Changed name group",
+        "join": "Join the group",
+        "validationErrors": {
+          "required": "Group name cannot be empty"
+        }
+      },
+      "chatInput": {
+        "sticker": "Sticker",
+        "emoji": "Emoji",
+        "message": "Message"
+      },
+      "chatCard": {
+        "isForwarded": "Forwarded message from",
+        "edited": "Edited",
+        "fullScreen": {
+          "commonMedia": "Shared Media",
+          "seeInChat": "Show message in chat",
+          "forward": "Forward to",
+          "delete": "Delete"
+        }
+      }
+    },
+    "callHistory": {
+      "history": "History",
+      "title": "Call History",
+      "hour": "{count} Hour",
+      "minute": "{count} Minute",
+      "second": "{count} second",
+      "and": "",
+      "removeAlert": "Are you sure to delete the selected contact?",
+      "yes": "yes",
+      "no": "no "
+    },
+    "contacts": {
+      "title": "Contact",
+      "inviteContatcsTitle": "Invite to Navatel",
+      "inviteContactButton": "Invite +",
+      "mediatabs": {
+        "media": "Media",
+        "file": "File",
+        "music": "Music",
+        "group": "Group"
+      },
+      "addContacts": {
+        "title": "Add contact",
+        "firstName": "Name",
+        "firstNamePlaceholder": "Name (Required)",
+        "lastName": "Last name",
+        "contact": "Contact",
+        "validationErrors": {
+          "firstName": "Name is required",
+          "lastName": "Family is required",
+          "userIsExist": "User is exist!"
+        },
+        "smsInvitationMessage": "Check out Navatel for your smartphone. Download it today from https://navatel.ir/downloads/"
+      },
+      "profile": {
+        "title": "Account Information",
+        "lastseen": "Last seen",
+        "call": "Call",
+        "videocall": "Video Call",
+        "mute": "Mute",
+        "phonenumber": "Phone Number",
+        "username": "Profile name",
+        "bio": "Bio",
+        "message": "Free Message"
+      },
+      "lastSeen": "Last seen {time}",
+      "yesterday": "Yesterday"
+    },
+    "profile": {
+      "title": "Profile",
+      "account": "Account",
+      "bio": "Bio",
+      "selectPhoto": "Select Profile's Photo",
+      "changeUserName": "Change Profile Name",
+      "username": "Profile Name",
+      "noName": "No Name",
+      "online": "Online",
+      "sticker": {
+        "headertitle": "Sticker",
+        "suggeststicker": "Recommended stickers",
+        "view": "Show",
+        "mysticker": "My sticker sets",
+        "delete": "Remove stickers",
+        "sticker": "Sticker",
+        "add": "Add",
+        "deletesticker": "Delete Sticker",
+        "loading": "Please loading"
+      },
+      "setting": {
+        "title": "Setting",
+        "language": "Language",
+        "calendar": "Calendar",
+        "applicationlanguage": "Application Language",
+        "english": "English",
+        "persian": "فارسی",
+        "ok": "ok",
+        "toshamsi": "Changing the display of Gregorian date to solar",
+        "tomiladi": "Changing the display of solar date to Gregorian",
+        "theme": "Theme",
+        "version": "Version"
+      },
+      "wallet": {
+        "title": "Wallet",
+        "validity": "Credit",
+        "addvalidity": "TopUp Credit",
+        "giftcode": "Gift Code",
+        "toman": "Toman",
+        "depoist": "Charge wallet",
+        "onlinedeposit": "Online Charge"
+      },
+      "savedMessage": {
+        "title": "Saved Messages"
+      },
+      "stickers": {
+        "title": "Stickers"
+      },
+      "support": {
+        "title": "Support"
+      },
+      "logout": {
+        "title": "Logout"
+      },
+      "options": {
+        "editName": "Edit Name",
+        "takePhoto": "Take a photo",
+        "deletePhoto": "Remove Photo"
+      },
+      "bioModal": {
+        "title": "BIO",
+        "inputHint": "In this section, you can write up to {count} characters about yourself"
+      },
+      "usernameModal": {
+        "title": "Edit Name",
+        "inputPlaceholder": "Enter Your Name",
+        "NameRequired": "Name is required!"
+      }
+    }
+  },
+  "permissionsModal": {
+    "notification": {
+      "text": "Do you allow Navatel to access notifications for calls and messages?",
+      "yes": "Allow",
+      "no": "Don't allow"
+    },
+    "microphone": {
+      "text": "Do you allow Navatel to access the microphone to make calls ?",
+      "yes": "Allow",
+      "no": "Don't allow"
+    }
+  },
+  "errorMessages": {
+    "serverSide": {
+      "title": "Server Error",
+      "text": "An error has occurred in connection with the server.",
+      "hint": "Please try again.",
+      "close": "Close",
+      "tryAgain": "Try Again"
+    }
+  }
+}

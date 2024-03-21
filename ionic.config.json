@@ -1,0 +1,8 @@
+{
+  "name": "web-clinet",
+  "integrations": {
+    "capacitor": {}
+  },
+  "innerHTMLTemplatesEnabled": true,
+  "type": "vue-vite"
+}
