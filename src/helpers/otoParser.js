@@ -23,6 +23,7 @@ export const chatsParser = async (
   source,
   groupMembers,
   minesGroupCard = 60,
+  targetMessageId,
 ) => {
   const { workerFn } = useWebWorkerFn(
     async ({
@@ -32,6 +33,7 @@ export const chatsParser = async (
       source,
       members,
       localeFormat,
+      targetMessageId,
     }) => {
       const detectTypeOfMessage = (information) => {
         const typeOfMessage = information.mtype.split('.')[1];
@@ -356,6 +358,7 @@ export const chatsParser = async (
         const { creation_time, from, modification_time, deliverstatus } = item;
         const { data, message } = chatBody;
         const { dim, edit_state, ext_data, guid } = data;
+        if (guid == targetMessageId) return;
         const extraData = ext_data
           ? typeof ext_data == 'string'
             ? JSON.parse(ext_data)
@@ -485,6 +488,7 @@ export const chatsParser = async (
     screenDimension,
     source,
     localeFormat,
+    targetMessageId,
   });
   const uniqueArray = await uniqueByProperty({ listData: result });
   return uniqueArray;

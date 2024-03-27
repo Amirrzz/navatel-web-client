@@ -18,30 +18,16 @@
   <ion-content :scroll-y="false">
     <DynamicVirtualScroller
       :list="getChatList"
-      :scrollerClasses="['scroller', 'messages-container']"
       :showLoading="showLoading"
-      :hasPrevMessages="getHasPrevMessages"
+      scrollerClasses="scroller messages-container"
       @setScrollerElement="setScrollerElement"
       @onScrollTop="getPrevMessages"
       @onScroll="setOnScrollState"
+      :hasPrevMessages="getHasPrevMessages"
     >
-      <template v-slot:item="{ item, index, active }">
-        <KeepAlive>
-          <MessageCard
-            :messageData="item"
-            :name="chatData.information.name"
-            :isSelected="selectedChatItems[item.id] ? true : false"
-            :isSelectState="selectingChatIsActive"
-            @onParentClick="clickEventHandler"
-            @setSelectedItems="setSelectedItems"
-            @onScrollToTargetChat="prepardDataToScrollTargetMessage"
-            @onEndPointer="gettingNextMessagesOfEndPointer"
-            @onCancelRequest="cancelRequestToServer"
-          ></MessageCard>
-        </KeepAlive>
-      </template>
     </DynamicVirtualScroller>
   </ion-content>
+  <!-- Container element where the pre-rendered items will be injected -->
   <ChatInput
     :replayMessageInfo="replayMessageInfo"
     @sendMessage="sendMessage"
@@ -51,6 +37,7 @@
     @closeManipulationContainer="replayMessageInfo = null"
   ></ChatInput>
 </template>
+
 <script setup>
 import { modalController, popoverController, IonContent } from '@ionic/vue';
 import {
@@ -101,13 +88,14 @@ const getHasPrevMessages = computed(() => {
 });
 const preventSendGetMessage = ref(false);
 const getPrevMessages = () => {
+  console.log('getPrevMessage');
   if (preventSendGetMessage.value) return;
   preventSendGetMessage.value = true;
   const OTOStore = useOtoStore();
   OTOStore.getPrevMessages({
     chatId: props.chatData.chatId,
     targetMessageId: getChatList.value[0].id,
-    count: 100,
+    count: 50,
     source: props.chatData.information.source,
     isDuringChat: true,
   }).then(() => {

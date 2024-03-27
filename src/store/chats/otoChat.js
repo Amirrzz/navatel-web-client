@@ -69,7 +69,7 @@ export const useOtoStore = defineStore('OtoStore', {
       return true;
     },
 
-    getFirstMessages({ chatId, count = 50, source }) {
+    getFirstMessages({ chatId, count = 500, source }) {
       return getFirstMessage(chatId, count).then(async (result) => {
         const parsedList = await this.getParsedMessages({
           listData: result,
@@ -88,6 +88,7 @@ export const useOtoStore = defineStore('OtoStore', {
           const parsedList = await this.getParsedMessages({
             listData: result,
             source,
+            targetMessageId,
           });
           return this.assignerMessageToList({
             parsedList,
@@ -104,6 +105,7 @@ export const useOtoStore = defineStore('OtoStore', {
           const parsedList = await this.getParsedMessages({
             listData: result,
             source,
+            targetMessageId,
           });
           return this.assignerMessageToList({
             parsedList,
@@ -235,11 +237,18 @@ export const useOtoStore = defineStore('OtoStore', {
       if (!isLoading) delete message.repliedData.isLoading;
       else message.repliedData.isLoading = true;
     },
-    async getParsedMessages({ listData, source }) {
+    async getParsedMessages({ listData, targetMessageId, source }) {
       const userStore = useUserStore();
       const themeStore = useThemeStore();
       const userId = userStore.userId;
-      const parsedList = await chatsParser(listData, userId, source, null, 0);
+      const parsedList = await chatsParser(
+        listData,
+        userId,
+        source,
+        null,
+        0,
+        targetMessageId,
+      );
       return parsedList;
     },
     async assignerMessageToList({
@@ -250,6 +259,7 @@ export const useOtoStore = defineStore('OtoStore', {
       isDuringChat,
       doseScroll = true,
     }) {
+      console.log(parsedList, 'kpkokpkp');
       if (isDuringChat) {
         if (addToEndList) {
           this.chatList[chatId].messages.push(...parsedList);
@@ -261,7 +271,7 @@ export const useOtoStore = defineStore('OtoStore', {
         if (doseScroll)
           requestAnimationFrame(() => {
             const scrollToIndex = parsedList.length;
-            this.scrollerElement?.scrollToItem(scrollToIndex);
+            // this.scrollerElement?.scrollToItem(scrollToIndex);
           });
       } else {
         this.chatList[chatId].messages = parsedList;

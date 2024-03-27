@@ -8,7 +8,7 @@ export const useMessangerHanlder = defineStore('MessangerHanlder', {
       chatId = null,
       lastSeenMessageId = null,
       lastMessageId = null,
-      count = 50,
+      count = 500,
       source,
     }) {
       if (!lastSeenMessageId && !lastMessageId) {

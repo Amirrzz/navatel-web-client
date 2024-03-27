@@ -5,7 +5,7 @@
   </ion-app>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { IonApp, IonRouterOutlet, getPlatforms } from '@ionic/vue';
 import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
