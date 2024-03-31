@@ -69,7 +69,7 @@ export const useOtoStore = defineStore('OtoStore', {
       return true;
     },
 
-    getFirstMessages({ chatId, count = 500, source }) {
+    getFirstMessages({ chatId, count = 50, source }) {
       return getFirstMessage(chatId, count).then(async (result) => {
         const parsedList = await this.getParsedMessages({
           listData: result,

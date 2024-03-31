@@ -17,7 +17,6 @@
   <audio controls controlsList="nodownload" v-if="!blobFilePath">
     <source src="" />
   </audio>
-  {{ typeOfAudio }}
 </template>
 <script setup>
 import { defineProps, ref, onBeforeMount } from 'vue';

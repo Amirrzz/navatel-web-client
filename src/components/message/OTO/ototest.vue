@@ -444,8 +444,8 @@ onUnmounted(() => {
   if (OTOStore.chatList[chatId]) {
     const messages = OTOStore.chatList[chatId].messages;
     OTOStore.chatList[chatId].messages = messages.splice(
-      messages.length - 50,
-      50,
+      messages.length - 49,
+      49,
     );
     OTOStore.currentChatId = '';
   }
