@@ -38,6 +38,7 @@ const handleReadMoreText = () => {
   isReadMore.value = false;
 };
 onMounted(() => {
+  return;
   if (props.messageData.content?.length > 300) {
     isReadMore.value = true;
   }

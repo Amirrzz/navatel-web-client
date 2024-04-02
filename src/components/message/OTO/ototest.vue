@@ -16,18 +16,46 @@
   >
   </ChatToolbarHeader>
   <ion-content :scroll-y="false">
-    <DynamicVirtualScroller
-      :list="getChatList"
-      :showLoading="showLoading"
-      scrollerClasses="scroller messages-container"
-      @setScrollerElement="setScrollerElement"
-      @onScrollTop="getPrevMessages"
-      @onScroll="setOnScrollState"
-      :hasPrevMessages="getHasPrevMessages"
+    <DynamicScroller
+      :items="getChatList"
+      :min-item-size="30"
+      class="scroller messages-container"
+      :class="{ 'opacity-0': showLoading }"
+      @scroll-start="getPrevMessages"
+      ref="scroller"
+      :buffer="0"
+      :prerender="500"
     >
-    </DynamicVirtualScroller>
+      <template v-slot="{ item, index, active }">
+        <DynamicScrollerItem
+          :item="item"
+          :key="index + '-' + item.id"
+          :active="active"
+          :size-dependencies="[
+            item.date,
+            item.content,
+            item.type,
+            item.forwardedData,
+            item.repliedData,
+          ]"
+          :data-index="item.id"
+          :data-active="active"
+        >
+          <MessageCard
+            :messageData="item"
+            :name="chatData.information.name"
+            :isSelected="selectedChatItems[item.id] ? true : false"
+            :isSelectState="selectingChatIsActive"
+            @onParentClick="clickEventHandler"
+            @setSelectedItems="setSelectedItems"
+            @onScrollToTargetChat="prepardDataToScrollTargetMessage"
+            @onEndPointer="gettingNextMessagesOfEndPointer"
+            @onCancelRequest="cancelRequestToServer"
+          ></MessageCard>
+        </DynamicScrollerItem>
+      </template>
+    </DynamicScroller>
   </ion-content>
-  <!-- Container element where the pre-rendered items will be injected -->
   <ChatInput
     :replayMessageInfo="replayMessageInfo"
     @sendMessage="sendMessage"
@@ -37,7 +65,6 @@
     @closeManipulationContainer="replayMessageInfo = null"
   ></ChatInput>
 </template>
-
 <script setup>
 import { modalController, popoverController, IonContent } from '@ionic/vue';
 import {
@@ -54,7 +81,8 @@ import { useOtoStore } from '@/store/chats/otoChat.js';
 import { useContactsStore } from '@/store/contacts/contacts.js';
 import { useFileManagerStore } from '@/store/fileManager/fileManager.js';
 import ChatToolbarHeader from '@/components/message/OTO/ChatToolbarHeader.vue';
-import DynamicVirtualScroller from '@/components/message/basics/DynamicVirtualScroller/index.vue';
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller';
+
 import MessageCard from '@/components/message/basics/MessageCard/index.vue';
 import ChatInput from '@/components/message/basics/ChatInput/index.vue';
 import ProfileContactModal from '@/components/contacts/profile/index.vue';
@@ -74,6 +102,7 @@ const props = defineProps({
     default: () => {},
   },
 });
+const scroller = ref(null);
 const showLoading = computed(() => {
   const OTOStore = useOtoStore();
   return OTOStore.showLoading;
@@ -88,7 +117,6 @@ const getHasPrevMessages = computed(() => {
 });
 const preventSendGetMessage = ref(false);
 const getPrevMessages = () => {
-  console.log('getPrevMessage');
   if (preventSendGetMessage.value) return;
   preventSendGetMessage.value = true;
   const OTOStore = useOtoStore();
@@ -248,6 +276,7 @@ const setCopyToClipboard = (messageData) => {
 };
 const setScrollerElement = (scrollerElement) => {
   const OTOStore = useOtoStore();
+  console.log(scrollerElement, 'lplplplplp');
   OTOStore.setScrollerElement(scrollerElement);
 };
 
@@ -420,6 +449,7 @@ const cancelRequestToServer = (messageData) => {
 onMounted(() => {
   const OTOStore = useOtoStore();
   const chatData = props.chatData;
+  setScrollerElement(scroller.value);
   OTOStore.currentChatId = chatData.chatId;
   if (!chatData.lastMessageData.guid && !chatData.lastSeenData.guid) {
     return;
@@ -444,10 +474,15 @@ onUnmounted(() => {
   if (OTOStore.chatList[chatId]) {
     const messages = OTOStore.chatList[chatId].messages;
     OTOStore.chatList[chatId].messages = messages.splice(
-      messages.length - 49,
-      49,
+      messages.length - 50,
+      50,
     );
     OTOStore.currentChatId = '';
   }
 });
 </script>
+<style>
+.scroller {
+  height: 100s;
+}
+</style>

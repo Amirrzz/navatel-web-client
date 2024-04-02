@@ -54,9 +54,9 @@ export default {
             this.streamBeingCaptured = stream;
 
             //create a media recorder instance by passing that stream into the MediaRecorder constructor
-            this.mediaRecorder = new MediaRecorder(stream, {
-              type: 'audio/ogg',
-            }); /*the MediaRecorder interface of the MediaStream Recording
+            this.mediaRecorder = new MediaRecorder(
+              stream,
+            ); /*the MediaRecorder interface of the MediaStream Recording
                     API provides functionality to easily record media*/
             //clear previously saved audio Blobs, if any
             this.audioBlobs = [];
@@ -97,10 +97,10 @@ export default {
           if (this.audioContext) {
             this.audioContext.close();
           }
-          let mimeType = 'audio/wav';
+          let mimeType = 'audio/mp3;';
           //create a single blob object, as we might have gathered a few Blob objects that needs to be joined as one
           let audioBlob = new Blob(this.audioBlobs, { type: mimeType });
-          audioBlob['name'] = 'recorded_audio.wav';
+          audioBlob['name'] = 'recorded_audio.mp3';
           const file = new File([audioBlob], audioBlob.name, {
             type: mimeType,
           });

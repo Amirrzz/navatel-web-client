@@ -45,7 +45,14 @@
 </template>
 <script setup>
 import { IonIcon, modalController } from '@ionic/vue';
-import { ref, defineProps, onMounted, computed, defineEmits } from 'vue';
+import {
+  ref,
+  defineProps,
+  onMounted,
+  computed,
+  defineEmits,
+  nextTick,
+} from 'vue';
 import { useFileManagerStore } from '@/store/fileManager/fileManager.js';
 import FullScreenImageModal from '@/components/message/basics/MessageCard/FullScreenImage.vue';
 import TimeAndState from '@/components/message/basics/MessageCard/TimeAndState.vue';
@@ -85,6 +92,7 @@ const dirIsLtr = computed(() => {
 });
 
 const downloadThumbnailFile = async () => {
+  await nextTick();
   const fileManagerStore = useFileManagerStore();
   const file = await fileManagerStore.handlerForGettingFile(
     props.messageData.content,
@@ -96,6 +104,7 @@ const downloadThumbnailFile = async () => {
 };
 
 const downloadMainMediaFile = async () => {
+  await nextTick();
   mainDownloadState.value = 'downloading';
   const fileManagerStore = useFileManagerStore();
   const file = await fileManagerStore.handlerForGettingFile(
@@ -145,6 +154,7 @@ const gettingImageStatus = computed(() => {
   return mainDownloadState.value;
 });
 onMounted(() => {
+  return;
   if (props.messageData.previewState) {
     if (props.messageData.status == 'uploading') {
       mainDownloadState.value = 'uploading';

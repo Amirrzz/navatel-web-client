@@ -40,7 +40,7 @@
 </template>
 <script setup>
 import { IonIcon } from '@ionic/vue';
-import { ref, defineProps, onBeforeMount, defineEmits } from 'vue';
+import { ref, defineProps, onBeforeMount, defineEmits, nextTick } from 'vue';
 import { useFileManagerStore } from '@/store/fileManager/fileManager.js';
 import { getItemFromIndexDB } from '@/helpers/dbManager';
 
@@ -77,6 +77,7 @@ const downloadRenderedFile = async () => {
   link.click();
 };
 const fileDownloadStateHandler = async () => {
+  await nextTick();
   const fileContent = await getItemFromIndexDB('files', props.fileInfo.fileId);
   if (fileContent) {
     blobFilePath.value = URL.createObjectURL(fileContent.mainFile);
@@ -88,6 +89,7 @@ const cancelingServerRequest = () => {
   emit('onCancelRequest');
 };
 onBeforeMount(() => {
+  return;
   fileDownloadStateHandler();
 });
 </script>

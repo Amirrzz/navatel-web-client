@@ -1,6 +1,8 @@
 import legacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
+import VueDevTools from 'vite-plugin-vue-devtools';
+
 import { defineConfig, loadEnv } from 'vite';
 
 // handel wite pwa
@@ -11,7 +13,7 @@ export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
     // vite config
-    plugins: [vue(), legacy()],
+    plugins: [VueDevTools(), vue(), legacy()],
     base: env.VITE_APP_NGINX_PATH,
     resolve: {
       alias: {

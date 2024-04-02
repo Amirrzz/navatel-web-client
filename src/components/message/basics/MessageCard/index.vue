@@ -191,14 +191,9 @@ const senderMessageName = computed(() => {
 
 const emit = defineEmits([
   'onParentClick',
-  'onReply',
-  'onCopy',
-  'onForward',
-  'onRemove',
   'onEndPointer',
   'onScrollToTargetChat',
   'onCancelRequest',
-  'setActiveSelectState',
   'setSelectedItems',
   'seenMessage',
 ]);
@@ -210,18 +205,14 @@ const clickEventHandler = (event) => {
   });
 };
 
-const preventOpenMenu = (event) => {
-  event.preventDefault();
-};
 const handlerForScrollTarget = () => {
   if (!props.isSelectState) emit('onScrollToTargetChat', props.messageData);
 };
-const initialSelectedItem = () => {
-  emitToSetSelectedItems('init');
-};
 const emitToSetSelectedItems = (state) => {
-  if (props.isSelectState || state == 'init')
+  if (props.isSelectState || state == 'init') {
+    console.log('lkkokokoko');
     emit('setSelectedItems', props.messageData);
+  }
 };
 const emitCancelRequest = () => {
   emit('onCancelRequest', props.messageData);

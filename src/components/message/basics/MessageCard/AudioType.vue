@@ -19,7 +19,7 @@
   </audio>
 </template>
 <script setup>
-import { defineProps, ref, onBeforeMount } from 'vue';
+import { defineProps, ref, onBeforeMount, nextTick } from 'vue';
 import { useFileManagerStore } from '@/store/fileManager/fileManager.js';
 
 const blobFilePath = ref();
@@ -33,6 +33,7 @@ const props = defineProps({
   },
 });
 const downloadMainFile = async () => {
+  await nextTick();
   const fileManagerStore = useFileManagerStore();
   // await fileManagerStore.getAllSystemFiles();
   const file = await fileManagerStore.handlerForGettingFile(

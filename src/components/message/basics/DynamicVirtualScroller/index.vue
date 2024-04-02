@@ -9,10 +9,11 @@ import {
   defineProps,
   defineEmits,
   nextTick,
-  watch,
+  watchEffect,
   h,
   createApp,
   KeepAlive,
+  onMounted,
 } from 'vue';
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller';
 import Loading from '@/components/message/basics/loading.vue';
@@ -34,12 +35,27 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isSelectState: {
+    type: Boolean,
+    default: false,
+  },
 });
 const emit = defineEmits([
   'onScrollTop',
   'onScroll',
   'onScrollEnd',
   'setScrollerElement',
+  'onParentClick',
+  'onReply',
+  'onCopy',
+  'onForward',
+  'onRemove',
+  'onEndPointer',
+  'onScrollToTargetChat',
+  'onCancelRequest',
+  'setActiveSelectState',
+  'setSelectedItems',
+  'seenMessage',
 ]);
 const showLoading = ref(false);
 const scroller = ref();
@@ -54,32 +70,24 @@ let itsOkToGettingPrevMessage = false;
 let preventGettingNewMessages = true;
 let tryToBottom = 3;
 let minesOfIndex = 0;
-watch(
-  () => getList.value,
-  async (val, newVal) => {
-    const tempArrayLength = newVal?.length || val?.length || 0;
-    console.log(tempArrayLength, 'tempArrayLength');
-    lastArrayLength = Math.max(tempArrayLength - lastArrayLength, 0);
-    console.log(lastArrayLength, 'lastArrayLength');
-    console.log(tempArrayLength - lastArrayLength, 'scrollToIndex');
+watchEffect(() => {
+  const items = props.list || [];
+  const tempArrayLength = items.length || 0;
+  console.log(tempArrayLength, 'tempArrayLength');
+  lastArrayLength = !itsOkToGettingPrevMessage
+    ? tempArrayLength
+    : Math.max(tempArrayLength - lastArrayLength, 0);
+  console.log(lastArrayLength, 'lastArrayLength');
+  console.log(tempArrayLength - lastArrayLength, 'scrollToIndex');
 
-    if (container.value) container.value.style.opacity = 0;
-    preventGettingNewMessages = true;
-    const data = {
-      messages: val || newVal || [],
-      scrollToIndex: !itsOkToGettingPrevMessage
-        ? tempArrayLength
-        : tempArrayLength - lastArrayLength,
-    };
-    setTimeout(() => {
-      preRenderMessageCard(data);
-    }, 0);
-  },
-  {
-    immediate: true,
-    deep: true,
-  },
-);
+  preventGettingNewMessages = true;
+  const data = {
+    messages: items,
+    scrollToIndex: !itsOkToGettingPrevMessage
+      ? tempArrayLength
+      : tempArrayLength - lastArrayLength,
+  };
+});
 
 const createParentComponent = ({ messages, scrollToIndex }) => {
   // Define the component options
@@ -88,61 +96,75 @@ const createParentComponent = ({ messages, scrollToIndex }) => {
     render() {
       // Render the MessageCard component with TextType as its child
       return h(
-        KeepAlive,
-        {},
-        h(
-          DynamicScroller,
-          {
-            ref: scroller,
-            items: messages,
-            'min-item-size': props.minItemSize,
-            class: `${props.scrollerClasses}`,
-            'emit-update': true,
-            buffer: 0,
-            prerender: 100,
-            'onScroll-start': emitOnScrollTop,
-            'onScroll-end': emitOnScrollEnd,
-            onScroll: emitOnScroll,
-            onVnodeMounted(event) {
-              console.log(tryToBottom);
-              if (itsFirstTry && !itsOkToGettingPrevMessage) {
-                const tempArrayLength = messages.length || 0;
-                lastArrayLength = tempArrayLength;
-                scrollToBottom();
-                itsFirstTry = false;
-              } else {
-                const tempArrayLength = messages.length || 0;
-                lastArrayLength = Math.max(
-                  tempArrayLength - lastArrayLength,
-                  0,
-                );
-                scrollToItem(scrollToIndex);
-              }
-              preventGettingNewMessages = false;
-            },
+        DynamicScroller,
+        {
+          ref: scroller,
+          items: messages,
+          'min-item-size': props.minItemSize,
+          class: `${props.scrollerClasses}`,
+          'emit-update': true,
+          buffer: 0,
+          prerender: 100,
+          'onScroll-start': emitOnScrollTop,
+          'onScroll-end': emitOnScrollEnd,
+          onScroll: emitOnScroll,
+          onVnodeMounted(event) {
+            if (itsFirstTry && !itsOkToGettingPrevMessage) {
+              const tempArrayLength = messages.length || 0;
+              lastArrayLength = tempArrayLength;
+              scrollToBottom();
+              itsFirstTry = false;
+            } else {
+              const tempArrayLength = messages.length || 0;
+              lastArrayLength = !itsOkToGettingPrevMessage
+                ? tempArrayLength
+                : Math.max(tempArrayLength - lastArrayLength, 0);
+              scrollToItem(scrollToIndex);
+            }
+            preventGettingNewMessages = false;
           },
-          {
-            default: ({ item, index, active }) =>
+        },
+        {
+          default: ({ item, index, active }) =>
+            h(
+              KeepAlive,
+              {},
               h(
-                KeepAlive,
-                {},
-                h(
-                  DynamicScrollerItem,
-                  {
-                    item: item,
-                    key: item.id + '-scroller-item' + index,
-                    'size-dependencies': [item.type, item.content, item.date],
-                    'data-index': item.id,
-                    active: active,
-                  },
-                  {
-                    default: () =>
-                      h(KeepAlive, {}, h(MessageCard, { messageData: item })),
-                  },
-                ),
+                DynamicScrollerItem,
+                {
+                  item: item,
+                  key: item.id + '-scroller-item' + index,
+                  'size-dependencies': [item.type, item.content, item.date],
+                  'data-index': item.id,
+                  active: active,
+                },
+                {
+                  default: () =>
+                    h(MessageCard, {
+                      messageData: item,
+                      isSelectState: props.isSelectState,
+
+                      onOnParentClick: (data) => {
+                        emit('onParentClick', data);
+                        console.log('onparent clicked');
+                      },
+                      onSetSelectedItems: (data) => {
+                        console.log('setSelectedItems', data);
+                        emit('setSelectedItems', data);
+                      },
+                      onOnCancelRequest: (data) => {
+                        console.log('onOnCancelRequest', data);
+                        emit('onCancelRequest', data);
+                      },
+                      onSeenMessage: (data) => {
+                        // console.log('onseenMessage', data);
+                        emit('seenMessage', data);
+                      },
+                    }),
+                },
               ),
-          },
-        ),
+            ),
+        },
       );
     },
   };
@@ -154,38 +176,7 @@ const createParentComponent = ({ messages, scrollToIndex }) => {
   app.mount(tempContainer);
   return tempContainer.firstChild;
 };
-const createChildsComponent = ({ messages, scrollToIndex }) => {
-  // Define the component options
-  preventGettingNewMessages = true;
-  const fragment = document.createDocumentFragment();
-  messages.forEach((item) => {
-    const options = {
-      render() {
-        // Render the MessageCard component with TextType as its child
-        return h(
-          DynamicScrollerItem,
-          {
-            item: item,
-            key: item.id + '-scroller-item',
-            'size-dependencies': [item.type, item.content],
-            'data-index': item.id,
-            active: true,
-          },
-          {
-            default: () =>
-              h(KeepAlive, null, h(MessageCard, { messageData: item })),
-          },
-        );
-      },
-    };
-    const app = createApp(options).use(i18n);
-    // Mount the component to a temporary element
-    const tempContainer = document.createElement('div');
-    app.mount(tempContainer);
-    fragment.appendChild(tempContainer.firstChild);
-  });
-  // Create the Vue application instance for the component
-};
+
 const preRenderMessageCard = async (data) => {
   const fragment = document.createDocumentFragment();
   const dynamicScrollerElement = createParentComponent(data);
@@ -196,14 +187,7 @@ const preRenderMessageCard = async (data) => {
 };
 let countOfgettingMessage = 0;
 const emitOnScrollTop = (event) => {
-  if (props.hasPrevMessages && !preventGettingNewMessages) {
-    countOfgettingMessage++;
-    if (countOfgettingMessage > 1) {
-      minesOfIndex = 1;
-    }
-    showLoading.value = true;
-    emit('onScrollTop');
-  }
+  emit('onScrollTop');
 };
 const emitOnScrollEnd = () => {
   if (showingChat.value) emit('onScrollEnd');
@@ -223,7 +207,7 @@ const scrollToBottom = async () => {
       await nextTick();
       setTimeout(() => {
         scrollToBottom();
-      }, 500);
+      }, 250);
       return;
     }
     setTimeout(async () => {
@@ -242,6 +226,7 @@ const scrollToItem = async (index) => {
   }
   if (scroller.value) {
     setTimeout(async () => {
+      await nextTick();
       await scroller.value.scrollToItem(index - minesOfIndex);
       await nextTick();
       showLoading.value = false;
@@ -250,6 +235,10 @@ const scrollToItem = async (index) => {
   }
   // scroller.value.$el.scrollToBottom(duration);
 };
+onMounted(() => {
+  if (container.value) container.value.style.opacity = 1;
+  preRenderMessageCard({ messages: props.list });
+});
 </script>
 <style>
 .scroller {

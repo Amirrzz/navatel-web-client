@@ -259,19 +259,19 @@ export const useOtoStore = defineStore('OtoStore', {
       isDuringChat,
       doseScroll = true,
     }) {
-      console.log(parsedList, 'kpkokpkp');
       if (isDuringChat) {
         if (addToEndList) {
-          this.chatList[chatId].messages.push(...parsedList);
+          this.chatList[chatId].messages.concat(parsedList);
         } else if (assignDirectly) {
           this.chatList[chatId].messages = parsedList;
         } else {
-          this.chatList[chatId].messages.unshift(...parsedList);
+          const array = parsedList.concat(this.chatList[chatId].messages);
+          this.chatList[chatId].messages = array;
         }
         if (doseScroll)
           requestAnimationFrame(() => {
             const scrollToIndex = parsedList.length;
-            // this.scrollerElement?.scrollToItem(scrollToIndex);
+            this.scrollerElement?.scrollToItem(scrollToIndex - 1);
           });
       } else {
         this.chatList[chatId].messages = parsedList;
