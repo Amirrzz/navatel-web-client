@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-input-container">
+  <div class="chat-input-content">
     <AttachmentInputs
       v-show="showAttcahmentInputs"
       @selectedFile="setFileForSendMessage"
@@ -132,12 +132,13 @@ import { ref, computed, defineEmits, defineProps } from 'vue';
 import { IonIcon, IonTextarea } from '@ionic/vue';
 import { close } from 'ionicons/icons';
 import { detectTextDirection } from '@/helpers/textFormatter.js';
-import audioRecorder from '@/helpers/audioRecorder.js';
-import AttachmentInputs from '@/components/desktop/message/basics/ChatInput/AttachmentInputs.vue';
-import EmojiPicker from '@/components/desktop/message/basics/ChatInput/EmojiPicker.vue';
 import { useI18n } from 'vue-i18n';
 import { getPlatforms } from '@ionic/vue';
 import { detectReplyMessageType } from '@/helpers/chatMessageParser.js';
+
+import audioRecorder from '@/helpers/audioRecorder.js';
+import AttachmentInputs from '@/components/desktop/message/basics/ChatInput/AttachmentInputs.vue';
+import EmojiPicker from '@/components/desktop/message/basics/ChatInput/EmojiPicker.vue';
 
 const { t } = useI18n();
 const emit = defineEmits([
@@ -274,6 +275,19 @@ const enterSendMessageHandler = (event) => {
 </script>
 
 <style scoped>
+.chat-input-content {
+  width: calc(100% - 450px);
+  height: 60px;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  z-index: 9999;
+  bottom: 0;
+  background: #fff;
+  margin-bottom: 15px;
+  margin-left: 30px;
+  border-radius: 50px;
+}
 .send-message-icon {
   cursor: pointer;
   width: 17px;
@@ -392,14 +406,12 @@ const enterSendMessageHandler = (event) => {
   flex-direction: column;
   position: relative;
   bottom: 0;
-  background-color: var(--ion-color-bg-input);
 }
 .target-message-container {
   width: 100%;
   height: 60px;
   display: flex;
   align-items: center;
-  background: #fff;
   padding: 0 15px;
 }
 .target-message-container .target-message-info {
@@ -426,12 +438,10 @@ const enterSendMessageHandler = (event) => {
   width: 100%;
   display: flex;
   align-items: center;
-  background: var(--ion-color-bg-input);
   justify-content: center;
   align-items: center;
   position: relative;
   z-index: 2;
-  border-top: 0.5px solid var(--ion-color-bg-chat);
 }
 .text-input {
   width: 95%;
@@ -453,7 +463,6 @@ const enterSendMessageHandler = (event) => {
   width: 100%;
   display: flex;
   align-items: center;
-  background: var(--ion-color-bg-input);
   justify-content: space-between;
   align-items: center;
   position: relative;

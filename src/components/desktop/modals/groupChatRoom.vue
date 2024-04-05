@@ -13,6 +13,7 @@
     @back="back"
     @makeVideoCall="makeVideoCall"
   />
+
   <DynamicVirtualScroller
     :list="getMessages"
     :scrollerClasses="[
@@ -20,6 +21,7 @@
       'messages-container',
       'group-chat-container',
     ]"
+    mode="desktop"
     :showLoading="showLoading"
     :minItemSize="60"
     :hasPrevMessages="hasPrevMessages"
@@ -41,19 +43,18 @@
       </KeepAlive>
     </template>
   </DynamicVirtualScroller>
+
   <ChatInput
     @sendMessage="sendMessageHandler"
-    :replayMessageInfo="replayMessageInformation"
+    @sendVoice="sendVoiceHandler"
     @closeManipulationContainer="replayMessageInformation = null"
+    @setScrollerElement="setScrollerElement"
+    :replayMessageInfo="replayMessageInformation"
   />
 </template>
 
 <script setup>
 import { modalController, popoverController } from '@ionic/vue';
-import MessageCard from '@/components/message/basics/MessageCard/index.vue';
-import DynamicVirtualScroller from '@/components/message/basics/DynamicVirtualScroller/index.vue';
-import ChatInput from '@/components/desktop/message/basics/ChatInput/index.vue';
-import ChatToolbarHeader from '@/components/desktop/message/basics/ChatToolbarHeader.vue';
 import { useGroupChat } from '@/store/chats/groupChat.js';
 import { computed, onMounted, ref, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -62,6 +63,11 @@ import { copyToClipboard } from '@/helpers/browserApis.js';
 import { useOverallChatsStore } from '@/store/chats/overall.js';
 import { useUserStore } from '@/store/user/user';
 import { useVideoCallStore } from '@/store/videoCall/videoCall';
+
+import MessageCard from '@/components/message/basics/MessageCard/index.vue';
+import DynamicVirtualScroller from '@/components/message/basics/DynamicVirtualScroller/index.vue';
+import ChatInput from '@/components/desktop/message/basics/ChatInput/index.vue';
+import ChatToolbarHeader from '@/components/desktop/message/basics/ChatToolbarHeader.vue';
 import ContextMenuPopover from '@/components/message/basics/MessageCard/ContextMenuPopover.vue';
 
 const nestedModalsDesktop = useNestedModalsDesktop();
@@ -94,6 +100,10 @@ const currentGroupInfo = computed(() => {
 const getMessages = computed(() => {
   return groupChatstore.currentGroup.messages;
 });
+
+const sendVoiceHandler = (event) => {
+  groupChatstore.handleSendMessage(event, '', 'audio');
+};
 
 const clickEventHandler = (event, item) => {
   if (selectingChatIsActive.value) {

@@ -29,7 +29,7 @@ export const getTargetMessage = (chatId, targetMessageId) => {
   return axios
     .get(`/oto/single/${chatId}/${targetMessageId}`)
     .then((response) => {
-      return response?.data;
+      return response?.data || {};
     });
 };
 

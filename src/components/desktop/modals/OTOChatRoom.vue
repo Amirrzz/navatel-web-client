@@ -14,6 +14,7 @@
   <DynamicVirtualScroller
     :list="getChatList"
     :scrollerClasses="['scroller', 'messages-container']"
+    mode="desktop"
     :showLoading="showLoading"
     :minItemSize="60"
     :hasPrevMessages="getHasPrevMessages"
@@ -37,21 +38,16 @@
     </template>
   </DynamicVirtualScroller>
   <ChatInput
-    :replayMessageInfo="replayMessageInfo"
     @sendMessage="sendMessage"
+    @sendVoice="sendVoiceAudio"
     @closeManipulationContainer="replayMessageInfo = null"
     @setScrollerElement="setScrollerElement"
+    :replayMessageInfo="replayMessageInfo"
   />
 </template>
 
 <script setup>
 import { popoverController } from '@ionic/vue';
-import MessageCard from '@/components/message/basics/MessageCard/index.vue';
-import DynamicVirtualScroller from '@/components/message/basics/DynamicVirtualScroller/index.vue';
-import ChatInput from '@/components/desktop/message/basics/ChatInput/index.vue';
-import ChatToolbarHeader from '@/components/desktop/message/basics/ChatToolbarHeader.vue';
-import ContextMenuPopover from '@/components/message/basics/MessageCard/ContextMenuPopover.vue';
-
 import { computed, ref, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useNestedModalsDesktop } from '@/store/nestedModals/nestedModalsDesktop.js';
@@ -62,6 +58,12 @@ import { useUserStore } from '@/store/user/user';
 import { useContactsStore } from '@/store/contacts/contacts.js';
 import { useCallStore } from '@/store/call/call.js';
 import { useVideoCallStore } from '@/store/videoCall/videoCall';
+
+import MessageCard from '@/components/message/basics/MessageCard/index.vue';
+import DynamicVirtualScroller from '@/components/message/basics/DynamicVirtualScroller/index.vue';
+import ChatInput from '@/components/desktop/message/basics/ChatInput/index.vue';
+import ChatToolbarHeader from '@/components/desktop/message/basics/ChatToolbarHeader.vue';
+import ContextMenuPopover from '@/components/message/basics/MessageCard/ContextMenuPopover.vue';
 
 const nestedModalsDesktop = useNestedModalsDesktop();
 const overallChatsStore = useOverallChatsStore();
@@ -87,6 +89,14 @@ const showLoading = computed(() => {
   const OTOStore = useOtoStore();
   return OTOStore.showLoading;
 });
+
+const sendVoiceAudio = (data) => {
+  const OTOStore = useOtoStore();
+
+  OTOStore.send({
+    files: [data],
+  });
+};
 
 const getChatList = computed(() => {
   const OTOStore = useOtoStore();

@@ -1,14 +1,6 @@
 <template>
-  <div
-    class="stickers-container"
-    :class="{ 'dark-bg-tab': getCurrentThemeIsDark }"
-  >
+  <div class="stickers-container">
     <div class="sticker-header-container">
-      <!-- <img
-        style="width: 30px; height: auto; margin: 0 12px"
-        src="/Images/tabs/clock-gray.svg"
-        alt="icon"
-      /> -->
       <coreSkeltonLoading
         v-if="headerLoading"
         v-for="i in userStickers.length"
@@ -56,6 +48,8 @@ import { getFile } from '@/helpers/parser.js';
 import { computed, onMounted, ref, defineEmits } from 'vue';
 import { useStickersStore } from '@/store/stickers/stickers.js';
 
+const emit = defineEmits(['onSelectSticker']);
+
 const themeStore = useThemeStore();
 const stickersStore = useStickersStore();
 const userStore = useUserStore();
@@ -63,8 +57,6 @@ const headerStickersFileId = ref([]);
 const headerStickersURL = ref([]);
 const headerLoading = ref(false);
 const contentLoading = ref(false);
-
-const emit = defineEmits(['sendSticker']);
 
 const getCurrentThemeIsDark = computed(() => {
   return themeStore.getThemeIsDark;
@@ -91,7 +83,7 @@ const handleSendSticker = async (sticker) => {
 onMounted(async () => {
   headerLoading.value = true;
   await stickersStore.getAllUserStickers();
-  userStickers.value.map((sticker) => {
+  userStickers.value.forEach((sticker) => {
     const result = { fileId: sticker.stickers[0].file_id, id: sticker.id };
     headerStickersFileId.value.push(result);
   });
@@ -112,10 +104,10 @@ onMounted(async () => {
 
 <style scoped>
 .stickers-container {
-  width: 100%;
-  height: 300px;
+  width: calc(100% - 460px);
   display: flex;
   flex-direction: column;
+  background: red;
 }
 
 .sticker-header-container {
@@ -124,6 +116,7 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   padding: 0 10px;
+  background: yellow;
 }
 
 .stciker-content {
@@ -134,6 +127,7 @@ onMounted(async () => {
   justify-content: center;
   align-items: center;
   overflow-x: scroll;
+  background: red;
 }
 
 .stciker-content .stciker {

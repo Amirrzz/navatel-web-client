@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { nextTick } from 'vue';
 import {
   sendMessage,
   getPreviouslyMessages,
@@ -47,6 +48,7 @@ export const useOtoStore = defineStore('OtoStore', {
       lastMessageId,
       lastSeenMessageId,
       source,
+      isFirstRequest,
     ) {
       if (!this.chatList[chatId]) {
         this.showLoading = true;
@@ -62,6 +64,7 @@ export const useOtoStore = defineStore('OtoStore', {
         lastMessageId,
         lastSeenMessageId,
         source,
+        isFirstRequest,
       });
       this.chatList[chatId].hasPrevMessages = false;
       await this[functionData.target](functionData.arguments);
@@ -82,13 +85,23 @@ export const useOtoStore = defineStore('OtoStore', {
         });
       });
     },
-    getPrevMessages({ chatId, targetMessageId, count, source, isDuringChat }) {
+    getPrevMessages({
+      chatId,
+      targetMessageId,
+      count,
+      source,
+      isDuringChat,
+      isFirstRequest,
+    }) {
       return getPreviouslyMessages(chatId, targetMessageId, count).then(
         async (result) => {
+          console.log('here', isFirstRequest);
+          const targetRemoveIdMessage = isFirstRequest ? null : targetMessageId;
+          console.log;
           const parsedList = await this.getParsedMessages({
             listData: result,
             source,
-            targetMessageId,
+            targetMessageId: targetRemoveIdMessage,
           });
           return this.assignerMessageToList({
             parsedList,
@@ -124,58 +137,29 @@ export const useOtoStore = defineStore('OtoStore', {
       isDuringChat,
       isEndPointer = false,
     }) {
-      let prevMessages = [];
-      if (!isEndPointer) {
-        prevMessages = await getPreviouslyMessages(
-          chatId,
-          targetMessageId,
-          prevCounts,
-        );
-      }
-
+      console.count();
+      let prevMessages = await getPreviouslyMessages(
+        chatId,
+        targetMessageId,
+        prevCounts,
+      );
       const nextMessages = await getNextMessages(
         chatId,
         targetMessageId,
         nextCounts,
       );
-      const prevMessagesParsedList = await this.getParsedMessages({
-        listData: prevMessages,
-        source,
-      });
-      const nextMessagesParsedList = await this.getParsedMessages({
-        listData: nextMessages,
-        source,
-      });
-      const indexTargetMessageInPrevMessages = prevMessagesParsedList.findIndex(
-        (e) => e.id == targetMessageId,
-      );
-      const indexTargetMessageInNextMessages = nextMessagesParsedList.findIndex(
-        (e) => e.id == targetMessageId,
-      );
-      if (indexTargetMessageInPrevMessages != -1) {
-        prevMessagesParsedList.splice(indexTargetMessageInPrevMessages, 1);
-      }
-      if (indexTargetMessageInNextMessages != -1) {
-        nextMessagesParsedList.splice(indexTargetMessageInNextMessages, 1);
-      }
       const targetMessage = await getTargetMessage(chatId, targetMessageId);
-      let parsedTargetMessage = await this.getParsedMessages({
-        listData: [targetMessage],
+      targetMessage['dosentRemove'] = true;
+      prevMessages.push(targetMessage);
+      const mergedList = prevMessages.concat(nextMessages);
+      const mergedParsedList = await this.getParsedMessages({
+        listData: mergedList,
         source,
+        targetMessageId,
       });
-      parsedTargetMessage = parsedTargetMessage[0];
-      if (nextMessagesParsedList && nextMessagesParsedList.length >= 99) {
-        nextMessagesParsedList[50].endPointerData = {
-          targetMessageIdForNextMessages: nextMessagesParsedList[0].id,
-        };
-      } else {
-        this.removeEndPointerProperyOfMessageData({
-          forceRemoveEndPointers: true,
-        });
-      }
-      prevMessagesParsedList.push(parsedTargetMessage);
-      const mergedList = prevMessagesParsedList.concat(nextMessagesParsedList);
-      return mergedList;
+      console.log(mergedParsedList, 'mergedParsedList');
+
+      return mergedParsedList;
     },
 
     async repliedMessageHandler({
@@ -184,44 +168,39 @@ export const useOtoStore = defineStore('OtoStore', {
       source,
       isEndPointer = false,
     }) {
-      return this.getNextAndPrevMessages({
+      const mergedList = await this.getNextAndPrevMessages({
         chatId,
         targetMessageId,
         isDuringChat: true,
         isEndPointer,
-      }).then(async (mergedList) => {
-        const parsedList = await keepUniqueAndUpdate({
-          oldList: this.getCurrentChat,
-          newList: mergedList,
-        });
-        return this.assignerMessageToList({
-          parsedList,
-          assignDirectly: true,
-          isDuringChat: true,
-          doseScroll: false,
-        }).then(() => {
-          const indexMessageInList = this.chatList[chatId].messages.findIndex(
-            (e) => e.id == targetMessageId,
-          );
-          return {
-            repliedTargetId: targetMessageId,
-            indexMessageInList: indexMessageInList,
-          };
-        });
       });
+
+      const parsedList = await keepUniqueAndUpdate({
+        oldList: this.getCurrentChat,
+        newList: mergedList,
+      });
+      this.assignerMessageToList({
+        parsedList,
+        assignDirectly: false,
+        isDuringChat: true,
+        doseScroll: false,
+        isEndPointer: false,
+      });
+      console.log(parsedList, 'parseList in base');
+      return parsedList;
     },
     removeEndPointerProperyOfMessageData({
       targetMessageId,
       chatId = this.currentChatId,
       forceRemoveEndPointers,
     }) {
-      if (forceRemoveEndPointers) {
-        this.chatList[chatId].messages.forEach((e) => {
-          delete e.endPointerData;
-        });
-        return;
-      }
       return new Promise((resolve, reject) => {
+        if (forceRemoveEndPointers) {
+          this.chatList[chatId].messages.forEach((e) => {
+            delete e.endPointerData;
+          });
+          resolve(true);
+        }
         const messageIndex = this.chatList[chatId].messages.findIndex(
           (e) => e.id == targetMessageId,
         );
@@ -251,7 +230,7 @@ export const useOtoStore = defineStore('OtoStore', {
       );
       return parsedList;
     },
-    async assignerMessageToList({
+    assignerMessageToList({
       parsedList,
       chatId = this.currentChatId,
       addToEndList = false,
@@ -259,20 +238,21 @@ export const useOtoStore = defineStore('OtoStore', {
       isDuringChat,
       doseScroll = true,
     }) {
+      console.log(addToEndList, 'kpkokpkp');
       if (isDuringChat) {
         if (addToEndList) {
-          this.chatList[chatId].messages.concat(parsedList);
+          this.chatList[chatId].messages.push(...parsedList);
         } else if (assignDirectly) {
           this.chatList[chatId].messages = parsedList;
         } else {
-          const array = parsedList.concat(this.chatList[chatId].messages);
-          this.chatList[chatId].messages = array;
+          console.log(parsedList, 'hihihihi');
+          this.chatList[chatId].messages.unshift(...parsedList);
         }
-        if (doseScroll)
-          requestAnimationFrame(() => {
-            const scrollToIndex = parsedList.length;
-            this.scrollerElement?.scrollToItem(scrollToIndex - 1);
-          });
+        if (doseScroll) {
+          const scrollToIndex = parsedList.length;
+          // this.scrollerElement?.scrollToItem(scrollToIndex);
+          return parsedList;
+        }
       } else {
         this.chatList[chatId].messages = parsedList;
       }
@@ -621,6 +601,17 @@ export const useOtoStore = defineStore('OtoStore', {
     },
     setScrollerElement(scrollerElement) {
       this.scrollerElement = scrollerElement;
+    },
+    resetEachSizeChatMessages() {
+      for (const key in this.chatList) {
+        const messages = this.chatList[key].messages;
+        if (messages.length > 49) {
+          this.chatList[key].messages = messages.splice(
+            messages.length - 49,
+            49,
+          );
+        }
+      }
     },
   },
   persist: {

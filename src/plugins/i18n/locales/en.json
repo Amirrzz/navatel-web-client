@@ -4,6 +4,7 @@
   "message": "Message | Messages | {count} Messages",
   "changeLanguage": "تغییر زبان",
   "desktop": {
+    "search": "Search",
     "welcome": "Welcome to navatel",
     "logout": "Logout",
     "addnewcontact": "Add new contact",

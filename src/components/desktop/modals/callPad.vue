@@ -28,14 +28,15 @@
 </template>
 
 <script setup>
-import CallPadContent from '@/components/desktop/callPad/callPadContent.vue';
 import { close } from 'ionicons/icons';
 import { IonIcon } from '@ionic/vue';
 import { useThemeStore } from '@/store/theme.js';
-import coreHeader from '../coreHeader.vue';
 import { computed, ref, onMounted } from 'vue';
 import { useNestedModalsDesktop } from '@/store/nestedModals/nestedModalsDesktop.js';
 import { useContactsStore } from '@/store/contacts/contacts.js';
+
+import coreHeader from '../coreHeader.vue';
+import CallPadContent from '@/components/desktop/callPad/callPadContent.vue';
 
 const contactStore = useContactsStore();
 const form = ref({

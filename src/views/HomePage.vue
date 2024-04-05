@@ -112,6 +112,8 @@ const { t, locale } = useI18n();
 import { userReseterStore } from '@/store/reset.js';
 import { handelBrowserTabVisibilityChange } from '@/helpers/browserApis.js';
 import { useRouter, useRoute } from 'vue-router';
+import { useOtoStore } from '@/store/chats/otoChat.js';
+
 const userStore = useUserStore();
 const contactsStore = useContactsStore();
 const RTMStore = useRTMStore();
@@ -224,6 +226,8 @@ onMounted(() => {
     reseterStore.setLengthForSaveInLocalStorage();
     const RTMStore = useRTMStore();
     RTMStore.disconnect();
+    const OTOStore = useOtoStore();
+    OTOStore.resetEachSizeChatMessages();
   });
 });
 </script>

@@ -19,7 +19,7 @@
   </audio>
 </template>
 <script setup>
-import { defineProps, ref, onBeforeMount, nextTick } from 'vue';
+import { defineProps, ref, onMounted } from 'vue';
 import { useFileManagerStore } from '@/store/fileManager/fileManager.js';
 
 const blobFilePath = ref();
@@ -32,19 +32,17 @@ const props = defineProps({
     default: 'audio/wav',
   },
 });
-const downloadMainFile = async () => {
-  await nextTick();
+const downloadMainFile = () => {
   const fileManagerStore = useFileManagerStore();
   // await fileManagerStore.getAllSystemFiles();
-  const file = await fileManagerStore.handlerForGettingFile(
-    props.fileId,
-    'audio',
-  );
-
-  blobFilePath.value = file.filePath;
+  fileManagerStore.handlerForGettingFile(props.fileId, 'audio').then((file) => {
+    if (file) blobFilePath.value = file.filePath;
+  });
 };
-onBeforeMount(() => {
-  downloadMainFile();
+onMounted(() => {
+  setTimeout(() => {
+    downloadMainFile();
+  }, 0);
 });
 </script>
 <style scoped>

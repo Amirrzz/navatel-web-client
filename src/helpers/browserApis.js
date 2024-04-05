@@ -1,5 +1,6 @@
 import { useOverallChatsStore } from '@/store/chats/overall.js';
 import { useCallStore, ringtoneAudio } from '@/store/call/call.js';
+
 let wakeLock;
 export function setScreenWakeLock(setOn = true) {
   if ('WakeLock' in window && 'request' in window.WakeLock) {

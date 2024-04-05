@@ -50,13 +50,14 @@
 </template>
 
 <script setup>
-import coreHeader from './coreHeader.vue';
 import { useI18n } from 'vue-i18n';
 import { computed, ref } from 'vue';
 import { useUserStore } from '@/store/user/user.js';
 import { useRouter } from 'vue-router';
 import { userReseterStore } from '@/store/reset.js';
 import { useNestedModalsDesktop } from '@/store/nestedModals/nestedModalsDesktop.js';
+
+import coreHeader from './coreHeader.vue';
 
 const { locale } = useI18n();
 const Router = useRouter();

@@ -7,13 +7,7 @@
       'text-direction-left': !messageData.textDirectionIsRtl,
     }"
   >
-    <span v-html="getTextContent" class="text-content"></span>
-    <span
-      class="read-more-style"
-      v-if="isReadMore"
-      @click="handleReadMoreText"
-      >{{ t('tabs.message.readMore') }}</span
-    >
+    <span class="text-content" v-html="messageData.content"></span>
   </div>
 </template>
 <script setup>
@@ -37,12 +31,6 @@ const getTextContent = computed(() => {
 const handleReadMoreText = () => {
   isReadMore.value = false;
 };
-onMounted(() => {
-  return;
-  if (props.messageData.content?.length > 300) {
-    isReadMore.value = true;
-  }
-});
 </script>
 <style scoped>
 .text-message {

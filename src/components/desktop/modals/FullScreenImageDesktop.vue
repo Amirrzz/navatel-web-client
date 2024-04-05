@@ -11,7 +11,8 @@
 
 <script setup>
 import { useNestedModalsDesktop } from '@/store/nestedModals/nestedModalsDesktop';
-import { computed, defineProps, ref } from 'vue';
+import { computed, ref } from 'vue';
+
 import VueEasyLightbox from 'vue-easy-lightbox';
 
 const nestedModalsDesktop = useNestedModalsDesktop();

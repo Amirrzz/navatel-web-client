@@ -22,15 +22,15 @@
 </template>
 
 <script setup>
-import { computed, defineProps, onBeforeMount, onMounted, ref } from 'vue';
 import { useFileManagerStore } from '@/store/fileManager/fileManager.js';
 import { modalController } from '@ionic/vue';
 import { useVirtualList } from '@vueuse/core';
+import { computed, defineProps, onBeforeMount, onMounted, ref } from 'vue';
 import ChatListItem from '@/components/message/list/ListItem.vue';
 import { useContactsStore } from '@/store/contacts/contacts.js';
 import { useOtoStore } from '@/store/chats/otoChat.js';
 import { useGroupChat } from '@/store/chats/groupChat';
-import OTOChatModal from '@/components/message/OTO/ototest.vue';
+import OTOChatModal from '@/components/message/OTO/index.vue';
 import GroupChatRoom from '@/components/message/groups/index.vue';
 import IframeOTOChatModal from '@/components/message/OTO/iframeMessages.vue';
 import IframeGroupChatRoom from '@/components/message/groups/iframeMessages.vue';

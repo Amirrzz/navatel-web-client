@@ -4,6 +4,7 @@
   "message": "پیام | پیام‌ها | {count} پیام",
   "changeLanguage": "Change Language",
   "desktop": {
+    "search": "جستجو",
     "welcome": "به نواتل خوش آمدید",
     "logout": "خروج",
     "addnewcontact": "اضافه کردن مخاطب جدید",

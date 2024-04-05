@@ -17,7 +17,11 @@
         v-if="createGroupStore.createGroupActiveFlag"
         class="search-contact-container fade-animation"
       >
-        <input type="text" placeholder="جستجو" v-model="searchValue" />
+        <input
+          type="text"
+          :placeholder="$t('desktop.search')"
+          v-model="searchValue"
+        />
         <img
           src="/Images/tabs/search-gray.svg"
           alt="icon"
@@ -52,7 +56,7 @@
 <script setup>
 import { personAdd } from 'ionicons/icons';
 import { IonIcon, onIonViewDidEnter } from '@ionic/vue';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useContactsStore } from '@/store/contacts/contacts.js';
 import { useNestedModalsDesktop } from '@/store/nestedModals/nestedModalsDesktop.js';
 import { useCreateGroup } from '@/store/createGroup/createGroup.js';
@@ -67,8 +71,12 @@ const createGroupStore = useCreateGroup();
 const router = useRouter();
 const searchValue = ref('');
 
+watch(searchValue, (oldValue, newValue) => {
+  contactsStore.search = searchValue.value;
+});
+
 const contactsListDataSource = computed(() => {
-  return contactsStore.contacts.navaphoneUsers;
+  return contactsStore.getListContacts;
 });
 
 const createContact = () => {

@@ -15,15 +15,14 @@
     @onForward="openFordadedMessage"
   >
   </ChatToolbarHeader>
-  <DynamicVirtualScroller
-    @onScrollTop="getPrevMessages"
-    @setScrollerElement="setScrollerElement"
-    id="scroller"
+  <ion-content
+    :scroll-events="true"
+    :scroll-y="true"
+    @ion-scroll.passive="computedScroll"
   >
     <KeepAlive v-for="item in getChatList" :key="item.id + 'keep'">
       <MessageCard
         :messageData="item"
-        :id="'card-' + item.id"
         :key="item.id + 'message card'"
         :name="chatData.information.name"
         :isSelected="selectedChatItems[item.id] ? true : false"
@@ -35,7 +34,7 @@
         @onCancelRequest="cancelRequestToServer"
       ></MessageCard>
     </KeepAlive>
-  </DynamicVirtualScroller>
+  </ion-content>
   <ChatInput
     :replayMessageInfo="replayMessageInfo"
     @sendMessage="sendMessage"
@@ -54,7 +53,6 @@ import {
   onMounted,
   onUnmounted,
   nextTick,
-  watchEffect,
 } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useCallStore } from '@/store/call/call.js';
@@ -71,17 +69,17 @@ import { useVideoCallStore } from '@/store/videoCall/videoCall';
 import { copyToClipboard } from '@/helpers/browserApis.js';
 import { useUserStore } from '@/store/user/user';
 import ContextMenuPopover from '@/components/message/basics/MessageCard/ContextMenuPopover.vue';
+
+const languageIsEnglish = computed(() => {
+  const { locale } = useI18n();
+  return locale.value == 'en';
+});
 const props = defineProps({
   chatData: {
     type: Object,
     default: () => {},
   },
 });
-const languageIsEnglish = computed(() => {
-  const { locale } = useI18n();
-  return locale.value == 'en';
-});
-
 const showLoading = computed(() => {
   const OTOStore = useOtoStore();
   return OTOStore.showLoading;
@@ -90,6 +88,37 @@ const getChatList = computed(() => {
   const OTOStore = useOtoStore();
   return OTOStore.getCurrentChat;
 });
+const getHasPrevMessages = computed(() => {
+  const OTOStore = useOtoStore();
+  return OTOStore.getHasPrevMessages;
+});
+const preventSendGetMessage = ref(false);
+const getPrevMessages = () => {
+  if (preventSendGetMessage.value) return;
+  preventSendGetMessage.value = true;
+  const OTOStore = useOtoStore();
+  OTOStore.getPrevMessages({
+    chatId: props.chatData.chatId,
+    targetMessageId: getChatList.value[0].id,
+    count: 50,
+    source: props.chatData.information.source,
+    isDuringChat: true,
+  }).then(() => {
+    nextTick(() => {
+      requestAnimationFrame(() => {
+        preventSendGetMessage.value = false;
+      });
+    });
+  });
+};
+const computedScroll = (event) => {
+  const { detail } = event;
+  console.log(detail, 'event');
+  const { scrollTop } = detail;
+  if (scrollTop == 0) {
+    console.log('reach top');
+  }
+};
 const gettingImage = computed(() => {
   const fileManagerStore = useFileManagerStore();
   const profile =
@@ -230,103 +259,27 @@ const setCopyToClipboard = (messageData) => {
   }
   resetSelectingChat();
 };
-const getHasPrevMessages = computed(() => {
-  const OTOStore = useOtoStore();
-  return OTOStore.getHasPrevMessages;
-});
-const preventSendGetMessage = ref(false);
-let tryToGetMessages = 0;
-const getPrevMessages = () => {
-  if (preventSendGetMessage.value || getHasPrevMessages.value == false) return;
-  const targetMessageId = getChatList.value[0].id;
-  const targetElementForScroll = messageCardScroller.value.querySelector(
-    `#card-${targetMessageId}`,
-  );
-  preventSendGetMessage.value = true;
-  const OTOStore = useOtoStore();
-  OTOStore.getPrevMessages({
-    chatId: props.chatData.chatId,
-    targetMessageId,
-    count: 50,
-    source: props.chatData.information.source,
-    isDuringChat: true,
-  }).then(() => {
-    nextTick(() => {
-      requestAnimationFrame(() => {
-        console.log(tryToGetMessages, 'tryToget');
-        if (tryToGetMessages != 0) {
-          const mainContainer =
-            messageCardScroller.value.shadowRoot.querySelector(
-              '[part="scroll"]',
-            );
-          const details = targetElementForScroll.getBoundingClientRect();
-          const scrollToValue = details.y - 100 - details.height / 2;
-          mainContainer.scrollTop = scrollToValue;
-          preventSendGetMessage.value = false;
-        }
-      });
-    });
-  });
-};
-
-const messageCardScroller = ref();
 const setScrollerElement = (scrollerElement) => {
-  messageCardScroller.value = scrollerElement.value.$el;
-  console.log(messageCardScroller.value, 'scroller element');
   const OTOStore = useOtoStore();
   OTOStore.setScrollerElement(scrollerElement);
 };
 
-const scrollToElement = async ({
+const scrollToElement = ({
   repliedTargetId,
   indexMessageInList,
   targetIdToObservEndPointer,
 }) => {
-  await nextTick();
-  const targetElementForScroll = messageCardScroller.value.querySelector(
-    `#card-${repliedTargetId}`,
-  );
-  if (targetElementForScroll) {
-    setTimeout(async () => {
-      await nextTick();
-      const mainContainer =
-        messageCardScroller.value.shadowRoot.querySelector('[part="scroll"]');
-      const targetElementRect = targetElementForScroll.getBoundingClientRect();
-      const mainContainerRect = mainContainer.getBoundingClientRect();
-      // Calculate the scroll position relative to the container
-      let scrollToValue =
-        targetElementRect.top - mainContainerRect.top + mainContainer.scrollTop;
-      scrollToValue = scrollToValue - targetElementRect.height / 2;
-      // Scroll to the calculated position
-      requestAnimationFrame(() => {
-        mainContainer.scrollTo({
-          top: scrollToValue,
-          left: 0,
-          behavior: 'smooth',
-        });
-      });
-      await nextTick();
-      targetElementForScroll.classList.remove('is-target-for-replied');
-      setTimeout(() => {
-        targetElementForScroll.classList.add('is-target-for-replied');
-        targetElementForScroll.addEventListener(
-          'animationend',
-          settingAnimation,
-        );
-        function settingAnimation() {
-          targetElementForScroll.classList.remove('is-target-for-replied');
-          targetElementForScroll.removeEventListener(
-            'animationend',
-            settingAnimation,
-          );
-        }
-      }, 300);
-    }, 0);
-  }
-  return;
+  const OTOStore = useOtoStore();
+  const scrollerElement = OTOStore.scrollerElement.$el;
   nextTick(() => {
+    const targetElement = scrollerElement.querySelector(
+      `#chat-oto-${repliedTargetId}`,
+    );
     setTimeout(() => {
       nextTick(() => {
+        requestAnimationFrame(() => {
+          OTOStore.scrollerElement.scrollToItem(indexMessageInList);
+        });
         if (targetElement) {
           targetElement.classList.remove('is-target-for-replied');
           setTimeout(() => {
@@ -405,7 +358,6 @@ const openFordadedMessage = () => {
   });
 };
 const prepardDataToScrollTargetMessage = (messageData) => {
-  console.log(messageData, 'message data');
   const OTOStore = useOtoStore();
   const repliedTargetId = messageData.repliedData.targetMessageId;
   const indexMessageInList = OTOStore.getCurrentChat.findIndex(
@@ -421,22 +373,36 @@ const prepardDataToScrollTargetMessage = (messageData) => {
     OTOStore.repliedMessageHandler({
       chatId: props.chatData.chatId,
       targetMessageId: repliedTargetId,
-    }).then(async (result) => {
-      const OTOStore = useOtoStore();
-      OTOStore.setLoadingStateForRepliedMesage({
-        chatId: props.chatData.chatId,
-        messageId: messageData.id,
-        isLoading: false,
-      });
-      scrollToElement({
-        repliedTargetId: repliedTargetId,
+    }).then((result) => {
+      nextTick(() => {
+        setTimeout(() => {
+          nextTick(() => {
+            scrollToElement(result);
+          });
+        }, 0);
+
+        nextTick(() => {
+          OTOStore.setLoadingStateForRepliedMesage({
+            chatId: props.chatData.chatId,
+            messageId: messageData.id,
+            isLoading: false,
+          });
+        });
       });
     });
     return;
+  } else {
+    nextTick(() => {
+      setTimeout(() => {
+        nextTick(() => {
+          scrollToElement({
+            repliedTargetId: repliedTargetId,
+            indexMessageInList,
+          });
+        });
+      }, 0);
+    });
   }
-  scrollToElement({
-    repliedTargetId: repliedTargetId,
-  });
 };
 const gettingNextMessagesOfEndPointer = async (messageData) => {
   if (!messageData.endPointerData) return;
@@ -464,43 +430,6 @@ const cancelRequestToServer = (messageData) => {
     id: messageData.id,
   });
 };
-const goToBottom = async () => {
-  const mainContainer =
-    messageCardScroller?.value?.shadowRoot.querySelector('[part="scroll"]');
-  if (!mainContainer) {
-    await nextTick();
-    setTimeout(() => {
-      goToBottom();
-    }, 100);
-    return;
-  }
-  requestAnimationFrame(() => {
-    mainContainer.scrollTop = mainContainer.scrollHeight;
-  });
-};
-const setSmothClassForScroller = () => {
-  console.count();
-  setTimeout(() => {
-    const mainContainer =
-      messageCardScroller?.value?.shadowRoot.querySelector('[part="scroll"]');
-    if (!mainContainer) return;
-    if (mainContainer) {
-      mainContainer.classList.add('smooth-scroller');
-      return;
-    }
-    setTimeout(() => {
-      mainContainer.classList.remove('smooth-scroller');
-    }, 1000);
-  }, 0);
-};
-let stopperWatcher = null;
-stopperWatcher = watchEffect(() => {
-  goToBottom();
-  if (tryToGetMessages > 0) {
-    stopperWatcher();
-  }
-});
-
 onMounted(() => {
   const OTOStore = useOtoStore();
   const chatData = props.chatData;
@@ -519,14 +448,7 @@ onMounted(() => {
     chatData.lastMessageData.guid,
     chatData.lastSeenData.guid,
     chatData.information.source,
-    true,
-  ).then((res) => {
-    goToBottom();
-    setTimeout(() => {
-      tryToGetMessages++;
-    }, 0);
-    console.log('at first');
-  });
+  );
 });
 
 onUnmounted(() => {
@@ -534,18 +456,11 @@ onUnmounted(() => {
   const chatId = OTOStore.currentChatId;
   if (OTOStore.chatList[chatId]) {
     const messages = OTOStore.chatList[chatId].messages;
-    if (messages.length > 49) {
-      OTOStore.chatList[chatId].messages = messages.splice(
-        messages.length - 49,
-        49,
-      );
-    }
+    OTOStore.chatList[chatId].messages = messages.splice(
+      messages.length - 50,
+      50,
+    );
+    OTOStore.currentChatId = '';
   }
-  OTOStore.currentChatId = '';
 });
 </script>
-<style>
-.smooth-scroller {
-  scroll-behavior: smooth;
-}
-</style>

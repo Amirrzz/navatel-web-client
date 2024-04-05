@@ -1,14 +1,6 @@
 <template>
-  <div
-    class="stickers-container"
-    :class="{ 'dark-bg-tab': getCurrentThemeIsDark }"
-  >
-    <div class="sticker-header-container">
-      <!-- <img
-        style="width: 30px; height: auto; margin: 0 12px"
-        src="/Images/tabs/clock-gray.svg"
-        alt="icon"
-      /> -->
+  <div class="container">
+    <div class="stickers-header-content">
       <coreSkeltonLoading
         v-if="headerLoading"
         v-for="i in userStickers.length"
@@ -26,7 +18,7 @@
         @click="setSticker(sticker.id)"
       />
     </div>
-    <div class="stciker-content">
+    <div class="content">
       <coreSkeltonLoading
         v-if="contentLoading"
         v-for="i in 12"
@@ -56,6 +48,8 @@ import { getFile } from '@/helpers/parser.js';
 import { computed, onMounted, ref, defineEmits } from 'vue';
 import { useStickersStore } from '@/store/stickers/stickers.js';
 
+const emit = defineEmits(['onSelectSticker']);
+
 const themeStore = useThemeStore();
 const stickersStore = useStickersStore();
 const userStore = useUserStore();
@@ -63,8 +57,6 @@ const headerStickersFileId = ref([]);
 const headerStickersURL = ref([]);
 const headerLoading = ref(false);
 const contentLoading = ref(false);
-
-const emit = defineEmits(['sendSticker']);
 
 const getCurrentThemeIsDark = computed(() => {
   return themeStore.getThemeIsDark;
@@ -91,7 +83,7 @@ const handleSendSticker = async (sticker) => {
 onMounted(async () => {
   headerLoading.value = true;
   await stickersStore.getAllUserStickers();
-  userStickers.value.map((sticker) => {
+  userStickers.value.forEach((sticker) => {
     const result = { fileId: sticker.stickers[0].file_id, id: sticker.id };
     headerStickersFileId.value.push(result);
   });
@@ -111,32 +103,26 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.stickers-container {
-  width: 100%;
-  height: 300px;
+.container {
   display: flex;
   flex-direction: column;
 }
 
-.sticker-header-container {
-  width: 100%;
-  height: 50px;
+.container .stickers-header-content {
   display: flex;
-  align-items: center;
-  padding: 0 10px;
+  padding: 10px 10px;
 }
 
-.stciker-content {
+.content {
   width: 100%;
   height: 250px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  overflow-x: scroll;
 }
 
-.stciker-content .stciker {
+.stciker {
   width: 70px;
   height: 70px;
   margin: 5px 10px;
@@ -148,9 +134,5 @@ onMounted(async () => {
 
 .stciker:hover {
   background: #959595a8;
-}
-
-.dark-bg-tab {
-  background: #000000;
 }
 </style>

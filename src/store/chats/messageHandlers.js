@@ -10,6 +10,7 @@ export const useMessangerHanlder = defineStore('MessangerHanlder', {
       lastMessageId = null,
       count = 50,
       source,
+      isFirstRequest,
     }) {
       if (!lastSeenMessageId && !lastMessageId) {
         /// its new user
@@ -19,6 +20,7 @@ export const useMessangerHanlder = defineStore('MessangerHanlder', {
           arguments: {
             chatId,
             count,
+            isFirstRequest,
           },
         };
       }
@@ -30,6 +32,7 @@ export const useMessangerHanlder = defineStore('MessangerHanlder', {
             targetMessageId: lastMessageId,
             count,
             source,
+            isFirstRequest,
           },
         };
       }
@@ -41,6 +44,7 @@ export const useMessangerHanlder = defineStore('MessangerHanlder', {
             targetMessageId: lastSeenMessageId,
             count,
             source,
+            isFirstRequest,
           },
         };
       }

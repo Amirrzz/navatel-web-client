@@ -54,9 +54,11 @@
 
 <script setup>
 import { useThemeStore } from '@/store/theme.js';
-import coreHeader from '../coreHeader.vue';
 import { useUserStore } from '@/store/user/user.js';
 import { computed } from 'vue';
+
+import coreHeader from '../coreHeader.vue';
+
 const nestedModalsDesktop = useNestedModalsDesktop();
 const themeStore = useThemeStore();
 

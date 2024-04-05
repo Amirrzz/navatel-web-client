@@ -32,10 +32,11 @@
 
 <script setup>
 import { useThemeStore } from '@/store/theme.js';
-import coreHeader from '../coreHeader.vue';
 import { computed } from 'vue';
 import { useNestedModalsDesktop } from '@/store/nestedModals/nestedModalsDesktop.js';
 import { useContactsStore } from '@/store/contacts/contacts.js';
+
+import coreHeader from '../coreHeader.vue';
 
 const contactStore = useContactsStore();
 

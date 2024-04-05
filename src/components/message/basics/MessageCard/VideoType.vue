@@ -89,15 +89,16 @@ const downloadThumbnailFile = async () => {
   }
   thumbnailBlobPath.value = file.filePath;
 };
-const downloadMainMediaFile = async () => {
+const downloadMainMediaFile = () => {
   mainDownloadState.value = 'downloading';
   const fileManagerStore = useFileManagerStore();
-  const file = await fileManagerStore.handlerForGettingFile(
-    props.messageData.content,
-    'video',
-  );
-  mainDownloadState.value = 'downloaded';
-  videoBlobPath.value = URL.createObjectURL(file.mainFile);
+  fileManagerStore
+    .handlerForGettingFile(props.messageData.content, 'video')
+    .then((file) => {
+      if (!file) return;
+      mainDownloadState.value = 'downloaded';
+      videoBlobPath.value = URL.createObjectURL(file.mainFile);
+    });
 };
 const cancelingServerRequest = () => {
   emit('onCancelRequest');
@@ -113,16 +114,18 @@ const gettingImageStatus = computed(() => {
   return mainDownloadState.value;
 });
 onMounted(() => {
-  if (props.messageData.previewState) {
-    if (props.messageData.status == 'uploading') {
-      mainDownloadState.value = 'uploading';
-    } else {
-      mainDownloadState.value = 'downloaded';
+  setTimeout(() => {
+    if (props.messageData.previewState) {
+      if (props.messageData.status == 'uploading') {
+        mainDownloadState.value = 'uploading';
+      } else {
+        mainDownloadState.value = 'downloaded';
+      }
+      videoBlobPath.value = props.messageData.previewState;
+      return;
     }
-    videoBlobPath.value = props.messageData.previewState;
-    return;
-  }
-  downloadThumbnailFile();
+    downloadThumbnailFile();
+  }, 0);
 });
 </script>
 <style scoped>

@@ -358,7 +358,7 @@ export const chatsParser = async (
         const { creation_time, from, modification_time, deliverstatus } = item;
         const { data, message } = chatBody;
         const { dim, edit_state, ext_data, guid } = data;
-        if (guid == targetMessageId) return;
+        if (guid == targetMessageId && !item.dosentRemove) return;
         const extraData = ext_data
           ? typeof ext_data == 'string'
             ? JSON.parse(ext_data)
@@ -629,25 +629,20 @@ function extractRepliedData(extraData) {
 
 export const keepUniqueAndUpdate = async ({ oldList, newList }) => {
   const { workerFn } = useWebWorkerFn(async ({ oldList, newList }) => {
-    const map = new Map();
-
-    // Add items from the old list to the map
-    oldList.forEach((item) => {
-      map.set(item.id, item);
+    const oldListIds = oldList.map((e) => e.id);
+    let filtredList = newList.filter((item) => {
+      if (!oldListIds.includes(item.id)) {
+        return item;
+      }
     });
-
-    // Add or update items from the new list to the map
-    newList.forEach((item) => {
-      map.set(item.id, item);
-    });
-
     // Convert the map back to an array of values
-    return Array.from(map.values()) || [];
+    return filtredList || [];
   });
   const oldListData = JSON.parse(JSON.stringify(oldList));
+  // Add items from the old list to the map
   const result = await workerFn({ oldList: oldListData, newList });
-  const sorted = await orderListHandler(result);
-  return sorted;
+  console.log(result);
+  return result;
 };
 
 export const orderListHandler = async (chatsList) => {

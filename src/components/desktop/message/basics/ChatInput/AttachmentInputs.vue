@@ -209,16 +209,17 @@ const sendLocation = () => {};
 
 <style scoped>
 .attach-menu-container {
-  width: 100%;
-  height: 95px;
+  width: calc(100% - 450px);
+  height: 80px;
   background: var(--ion-color-bg-input);
   display: flex;
   justify-content: space-between;
-  z-index: 1;
-  position: relative;
+  z-index: 9999;
+  position: fixed;
   overflow: hidden;
-  gap: 10px;
-  padding: 0 10px;
+  padding: 10px 50px;
+  border-radius: 50px;
+  margin-bottom: 150px;
 }
 
 .attach-menu-container .item {
@@ -235,8 +236,8 @@ const sendLocation = () => {};
 }
 
 .circle {
-  width: calc(70px - 1.5vw);
-  height: calc(70px - 1.5vw);
+  width: calc(65px - 1.5vw);
+  height: calc(65px - 1.5vw);
   display: flex;
   justify-content: center;
   align-items: center;
